@@ -1,0 +1,3 @@
+# Ignore cspell configuration files
+cspell.json
+cspell.config.json
