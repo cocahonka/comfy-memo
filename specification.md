@@ -87,8 +87,6 @@
 
 ## 3. Дизайн
 
-Дизайн приложения разработан в соответствии с [Material Design 3](https://m3.material.io/)
+Дизайн приложения разработан в соответствии с [Material Design 3](https://m3.material.io/), используя цвета, типографику и другие элементы из этого стиля. Дизайн стремится максимально следовать описанным гайдлайнам.
 
-Прототип (Wireframe) приложения доступен в Figma &mdash; [Wireframe](https://www.figma.com/design/CVwH19B1uxDVptcWmo3dMN/wireframe?node-id=1-1139&t=s1kSaLOzOpA9gDJS-1)
-
-Основной дизайн приложения доступен в Figma &mdash; [Design](https://www.figma.com/design/zoq5K9kUOZoZkNS4A3rK1d/Design?node-id=0-1&t=63ZqtrhEdyjZ56kp-1)
+Прототип (Wireframe) и основной дизайн приложения доступны в Figma на разных страницах одного файла: [Wireframe и Design в Figma](https://www.figma.com/design/CVwH19B1uxDVptcWmo3dMN/comfy-memo?node-id=38-65&t=uoG4BnbBraSNurUB-1)
