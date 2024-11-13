@@ -33,7 +33,8 @@ final class FsrsReviewLog implements Comparable<FsrsReviewLog> {
           id: id,
           reviewLogId: reviewLogId,
           learningState: LearningState.values.singleWhere(
-              (learningState) => learningState.number == learningStateNumber),
+            (learningState) => learningState.number == learningStateNumber,
+          ),
         ),
       _ => throw FormatException('Invalid JSON Schema for FsrsReviewLog: $json')
     };
