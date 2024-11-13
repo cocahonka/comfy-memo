@@ -7,6 +7,8 @@ analyzer:
   errors:
     todo: ignore
 
+    unused_local_variable: info
+
     avoid_catches_without_on_clauses: warning
     avoid_catching_errors: warning
     avoid_setters_without_getters: warning
@@ -45,7 +47,6 @@ analyzer:
     avoid_annotating_with_dynamic: error
     avoid_dynamic_calls: error
     avoid_equals_and_hash_code_on_mutable_classes: error
-    avoid_print: error
     avoid_relative_lib_imports: error
     avoid_renaming_method_parameters: error
     avoid_returning_null_for_void: error
@@ -67,6 +68,9 @@ analyzer:
     use_build_context_synchronously: error
     valid_regexps: error
     void_checks: error
+
+    # Situational
+    avoid_print: error
 
 linter:
   rules:
@@ -127,7 +131,6 @@ linter:
     deprecated_consistency: true
     directives_ordering: true
     discarded_futures: true
-    document_ignores: true
     empty_catches: true
     empty_constructor_bodies: true
     empty_statements: true
@@ -179,7 +182,6 @@ linter:
     prefer_const_literals_to_create_immutables: true
     prefer_constructors_over_static_methods: true
     prefer_contains: true
-    prefer_expression_function_bodies: true
     prefer_final_fields: true
     prefer_final_in_for_each: true
     prefer_final_locals: true
@@ -267,9 +269,6 @@ linter:
     valid_regexps: true
     void_checks: true
 
-    avoid_print: true
-    use_string_buffers: true
-
     always_put_control_body_on_new_line: false
     avoid_redundant_argument_values: false
     always_specify_types: false
@@ -285,3 +284,9 @@ linter:
     public_member_api_docs: false
     sort_pub_dependencies: false
     unnecessary_final: false
+
+    # Situational
+    avoid_print: true
+    document_ignores: true
+    use_string_buffers: true
+    prefer_expression_function_bodies: false
