@@ -19,6 +19,11 @@ class FlashcardEntity {
   final SelfVerifyType selfVerifyType;
 
   @override
-  String toString() => 'FlashcardEntity(id: $id, title: $title, term: $term, '
-      'definition: $definition, selfVerifyType: $selfVerifyType)';
+  String toString() => 'FlashcardEntity('
+      'id: $id, '
+      'title: $title, '
+      'term: $term, '
+      'definition: $definition, '
+      'selfVerifyType: $selfVerifyType'
+      ')';
 }

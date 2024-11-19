@@ -16,6 +16,10 @@ final class FlashcardEditDto {
   final SelfVerifyType? selfVerifyType;
 
   @override
-  String toString() => 'FlashcardEditDto(title: $title, term: $term, '
-      'definition: $definition, selfVerifyType: $selfVerifyType)';
+  String toString() => 'FlashcardEditDto('
+      'title: $title, '
+      'term: $term, '
+      'definition: $definition, '
+      'selfVerifyType: $selfVerifyType'
+      ')';
 }

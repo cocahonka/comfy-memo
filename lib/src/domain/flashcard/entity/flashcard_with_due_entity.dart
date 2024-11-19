@@ -17,7 +17,12 @@ final class FlashcardWithDueEntity extends FlashcardEntity {
   bool get isRepetitionTime => due.isBefore(DateTime.now());
 
   @override
-  String toString() =>
-      'FlashcardWithDueEntity(id: $id, title: $title, term: $term, '
-      'definition: $definition, selfVerifyType: $selfVerifyType, due: $due)';
+  String toString() => 'FlashcardWithDueEntity('
+      'id: $id, '
+      'title: $title, '
+      'term: $term, '
+      'definition: $definition, '
+      'selfVerifyType: $selfVerifyType, '
+      'due: $due'
+      ')';
 }
