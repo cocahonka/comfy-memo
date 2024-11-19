@@ -1,26 +1,22 @@
+import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:meta/meta.dart';
 
-enum SelfVerifyType { none, written }
-
 @immutable
-class FlashcardEntity {
-  const FlashcardEntity({
-    required this.id,
+final class FlashcardEditDto {
+  const FlashcardEditDto({
     required this.title,
     required this.term,
     required this.definition,
     required this.selfVerifyType,
   });
 
-  final int id;
-  final String title;
-  final String term;
-  final String definition;
-  final SelfVerifyType selfVerifyType;
+  final String? title;
+  final String? term;
+  final String? definition;
+  final SelfVerifyType? selfVerifyType;
 
   @override
-  String toString() => 'FlashcardEntity('
-      'id: $id, '
+  String toString() => 'FlashcardEditDto('
       'title: $title, '
       'term: $term, '
       'definition: $definition, '
