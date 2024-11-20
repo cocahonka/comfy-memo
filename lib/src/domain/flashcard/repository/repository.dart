@@ -3,7 +3,7 @@ import 'package:comfy_memo/src/domain/flashcard/dto/flashcard_edit_dto.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 
 abstract interface class IFlashcardRepository {
-  Future<void> create(FlashcardCreateDto params);
+  Future<FlashcardEntity> create(FlashcardCreateDto params);
 
   Future<List<FlashcardEntity>> fetchAll();
   Future<FlashcardEntity> fetch(int id);
