@@ -1,7 +1,5 @@
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 final class FlashcardWithDueEntity extends FlashcardEntity {
   const FlashcardWithDueEntity({
     required super.id,
