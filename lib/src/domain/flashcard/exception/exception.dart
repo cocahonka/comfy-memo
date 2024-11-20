@@ -10,3 +10,10 @@ sealed class FlashcardDomainException implements Exception {
   final String message;
   final Object? cause;
 }
+
+final class FlashcardValidationException extends FlashcardDomainException {
+  const FlashcardValidationException({
+    required super.message,
+    super.cause,
+  });
+}
