@@ -1,4 +1,4 @@
-import 'package:comfy_memo/src/domain/algorithm/entity/rating.dart';
+import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -11,7 +11,7 @@ base class ReviewLogEntity {
 
   final int cardId;
   final DateTime review;
-  final Rating rating;
+  final LearningRating rating;
 
   @override
   int get hashCode => Object.hashAll([
