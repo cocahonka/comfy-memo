@@ -22,6 +22,37 @@ final class FsrsSchedulerEntryEntity extends SchedulerEntryEntity {
   final LearningState learningState;
 
   @override
+  int get hashCode => Object.hashAll([
+        cardId,
+        due,
+        scheduledDays,
+        elapsedDays,
+        reps,
+        lapses,
+        lastReview,
+        schedulerId,
+        stability,
+        difficulty,
+        learningState,
+      ]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FsrsSchedulerEntryEntity &&
+          cardId == other.cardId &&
+          due == other.due &&
+          scheduledDays == other.scheduledDays &&
+          elapsedDays == other.elapsedDays &&
+          reps == other.reps &&
+          lapses == other.lapses &&
+          lastReview == other.lastReview &&
+          schedulerId == other.schedulerId &&
+          stability == other.stability &&
+          difficulty == other.difficulty &&
+          learningState == other.learningState;
+
+  @override
   String toString() => 'FsrsSchedulerEntryEntity('
       'cardId: $cardId, '
       'due: $due, '

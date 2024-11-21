@@ -26,7 +26,18 @@ void main() {
       flashcardRepository: mockFlashcardRepository,
       schedulerEntryRepository: mockSchedulerEntryRepository,
     );
+    provideDummy(
+      const FlashcardEntity(
+        id: 0,
+        title: 'title',
+        term: 'term',
+        definition: 'definition',
+        selfVerifyType: SelfVerifyType.none,
+      ),
+    );
   });
+
+  tearDown(resetMockitoState);
 
   test(
       'CreateFlashcardUsecase throws FlashcardValidationException '
@@ -76,15 +87,6 @@ void main() {
       selfVerifyType: SelfVerifyType.none,
     );
 
-    final entity = FlashcardEntity(
-      id: 0,
-      title: dto.title,
-      term: dto.term,
-      definition: dto.definition,
-      selfVerifyType: dto.selfVerifyType,
-    );
-
-    when(mockFlashcardRepository.create(any)).thenAnswer((_) async => entity);
     await usecase(flashcardCreateData: dto);
 
     verify(mockFlashcardRepository.create(any)).called(1);
