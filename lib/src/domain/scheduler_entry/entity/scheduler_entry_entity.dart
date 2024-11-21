@@ -21,6 +21,29 @@ base class SchedulerEntryEntity {
   final DateTime lastReview;
 
   @override
+  int get hashCode => Object.hashAll([
+        cardId,
+        due,
+        scheduledDays,
+        elapsedDays,
+        reps,
+        lapses,
+        lastReview,
+      ]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SchedulerEntryEntity &&
+          cardId == other.cardId &&
+          due == other.due &&
+          scheduledDays == other.scheduledDays &&
+          elapsedDays == other.elapsedDays &&
+          reps == other.reps &&
+          lapses == other.lapses &&
+          lastReview == other.lastReview;
+
+  @override
   String toString() => 'SchedulerEntryEntity('
       'cardId: $cardId, '
       'due: $due, '

@@ -15,6 +15,27 @@ final class FlashcardWithDueEntity extends FlashcardEntity {
   bool get isRepetitionTime => due.isBefore(DateTime.now());
 
   @override
+  int get hashCode => Object.hashAll([
+        id,
+        title,
+        term,
+        definition,
+        selfVerifyType,
+        due,
+      ]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FlashcardWithDueEntity &&
+          id == other.id &&
+          title == other.title &&
+          term == other.term &&
+          definition == other.definition &&
+          selfVerifyType == other.selfVerifyType &&
+          due == other.due;
+
+  @override
   String toString() => 'FlashcardWithDueEntity('
       'id: $id, '
       'title: $title, '
