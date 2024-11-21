@@ -118,15 +118,11 @@ base class SchedulingInfo {
 
 @immutable
 base class SchedulingCards {
-  SchedulingCards({
-    required Card again,
-    required Card hard,
-    required Card good,
-    required Card easy,
-  })  : again = again.copyWith(),
-        hard = hard.copyWith(),
-        good = good.copyWith(),
-        easy = easy.copyWith();
+  SchedulingCards({required Card card})
+      : again = card.copyWith(),
+        hard = card.copyWith(),
+        good = card.copyWith(),
+        easy = card.copyWith();
 
   final Card again;
   final Card hard;
