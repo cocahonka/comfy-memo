@@ -89,7 +89,7 @@ base class Card {
     );
   }
 
-  double getRetrievability(DateTime? now) {
+  double getRetrievability([DateTime? now]) {
     const decay = -0.5;
     final factor = pow(0.9, 1 / decay) - 1;
 

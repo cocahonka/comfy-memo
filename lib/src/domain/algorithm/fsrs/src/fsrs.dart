@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 base class Fsrs {
-  Fsrs({required this.parameters});
+  Fsrs({Parameters? parameters}) : parameters = parameters ?? Parameters();
 
   final Parameters parameters;
   final double decay = -0.5;
