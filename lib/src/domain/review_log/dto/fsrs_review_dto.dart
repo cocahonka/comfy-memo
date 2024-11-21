@@ -3,8 +3,8 @@ import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-final class FsrsReviewLogDto {
-  const FsrsReviewLogDto({
+final class FsrsReviewDto {
+  const FsrsReviewDto({
     required this.review,
     required this.rating,
     required this.state,
