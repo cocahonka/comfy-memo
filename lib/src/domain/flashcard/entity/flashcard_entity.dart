@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 enum SelfVerifyType { none, written }
 
 @immutable
-class FlashcardEntity {
+base class FlashcardEntity {
   const FlashcardEntity({
     required this.id,
     required this.title,

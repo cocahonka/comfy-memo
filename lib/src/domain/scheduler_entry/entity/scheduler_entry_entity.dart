@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class SchedulerEntryEntity {
+base class SchedulerEntryEntity {
   const SchedulerEntryEntity({
     required this.cardId,
     required this.due,
