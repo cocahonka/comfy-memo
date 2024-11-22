@@ -26,6 +26,7 @@ final class FsrsAlgorithmUsecase {
   ({FsrsSchedulerUpdateDto schedulerUpdateDto, FsrsReviewDto reviewDto}) call({
     required FsrsSchedulerEntryEntity scheduler,
     required LearningRating rating,
+    DateTime? repeatTime,
   }) {
     final inputCard = _toCard(scheduler);
     final inputRating = _toRating(rating);
@@ -33,6 +34,7 @@ final class FsrsAlgorithmUsecase {
     final (:card, :reviewLog) = _algorithm.reviewCard(
       card: inputCard,
       rating: inputRating,
+      repeatTime: repeatTime,
     );
 
     final schedulerUpdateDto = _toSchedulerUpdateDto(card);
