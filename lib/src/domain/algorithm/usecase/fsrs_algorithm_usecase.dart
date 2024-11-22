@@ -88,7 +88,7 @@ final class FsrsAlgorithmUsecase {
         elapsedDays: card.elapsedDays,
         reps: card.reps,
         lapses: card.lapses,
-        lastReview: card.lastReview ?? DateTime.now().toUtc(),
+        lastReview: card.lastReview,
         stability: card.stability,
         difficulty: card.difficulty,
         learningState: _toLearningState(card.state),

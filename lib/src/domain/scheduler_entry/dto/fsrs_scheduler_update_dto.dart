@@ -20,7 +20,7 @@ final class FsrsSchedulerUpdateDto {
   final int elapsedDays;
   final int reps;
   final int lapses;
-  final DateTime lastReview;
+  final DateTime? lastReview;
   final double stability;
   final double difficulty;
   final LearningState learningState;

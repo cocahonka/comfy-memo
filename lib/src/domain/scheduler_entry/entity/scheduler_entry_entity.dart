@@ -18,7 +18,7 @@ base class SchedulerEntryEntity {
   final int elapsedDays;
   final int reps;
   final int lapses;
-  final DateTime lastReview;
+  final DateTime? lastReview;
 
   @override
   int get hashCode => Object.hashAll([
