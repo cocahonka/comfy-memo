@@ -1,4 +1,5 @@
 import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
+import 'package:comfy_memo/src/domain/algorithm/exception/exception.dart';
 import 'package:comfy_memo/src/domain/algorithm/fsrs/fsrs.dart' as fsrs;
 import 'package:comfy_memo/src/domain/review_log/dto/fsrs_review_dto.dart';
 import 'package:comfy_memo/src/domain/scheduler_entry/dto/fsrs_scheduler_update_dto.dart';
@@ -29,6 +30,12 @@ final class FsrsAlgorithmUsecase {
     DateTime? repeatTime,
   }) {
     final now = repeatTime ?? DateTime.now().toUtc();
+    if (!now.isUtc) {
+      throw const FsrsRepeatTimeNotInUtcException(
+        message: 'repeat time must be in UTC',
+      );
+    }
+
     final inputCard = _toCard(scheduler);
     final inputRating = _toRating(rating);
 

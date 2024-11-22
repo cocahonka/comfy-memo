@@ -1,4 +1,5 @@
 import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
+import 'package:comfy_memo/src/domain/algorithm/exception/exception.dart';
 import 'package:comfy_memo/src/domain/algorithm/fsrs/fsrs.dart' as fsrs;
 import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
 import 'package:comfy_memo/src/domain/scheduler_entry/entity/fsrs_scheduler_entry_entity.dart';
@@ -7,6 +8,7 @@ import 'package:test/test.dart';
 void main() {
   late FsrsAlgorithmUsecase usecase;
   late fsrs.Fsrs algorithm;
+
   setUp(() {
     algorithm = fsrs.Fsrs();
     usecase = FsrsAlgorithmUsecase();
@@ -106,4 +108,32 @@ void main() {
       );
     }
   });
+
+  test(
+    'FsrsAlgorithmUsecase thrown exception when repeat time not in UTC',
+    () {
+      final fakeScheduler = FsrsSchedulerEntryEntity(
+        cardId: 0,
+        due: DateTime.now(),
+        scheduledDays: 0,
+        elapsedDays: 0,
+        reps: 0,
+        lapses: 0,
+        lastReview: null,
+        schedulerId: 0,
+        stability: 0,
+        difficulty: 0,
+        learningState: LearningState.newState,
+      );
+
+      expect(
+        () => usecase(
+          repeatTime: DateTime.now().toLocal(),
+          rating: LearningRating.forgot,
+          scheduler: fakeScheduler,
+        ),
+        throwsA(isA<FsrsRepeatTimeNotInUtcException>()),
+      );
+    },
+  );
 }
