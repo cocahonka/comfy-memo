@@ -1,4 +1,4 @@
-import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm.dart';
+import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
 import 'package:comfy_memo/src/domain/review_log/entity/review_log_entity.dart';
 
 final class FsrsReviewLogEntity extends ReviewLogEntity {
