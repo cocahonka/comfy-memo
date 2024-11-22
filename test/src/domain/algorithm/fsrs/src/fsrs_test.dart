@@ -1,5 +1,4 @@
-import 'package:comfy_memo/src/domain/algorithm/fsrs/src/fsrs.dart';
-import 'package:comfy_memo/src/domain/algorithm/fsrs/src/models.dart';
+import 'package:comfy_memo/src/domain/algorithm/fsrs/fsrs.dart';
 import 'package:test/test.dart';
 
 void main() {
