@@ -2,8 +2,8 @@ import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-final class FsrsUpdateDto {
-  const FsrsUpdateDto({
+final class FsrsSchedulerUpdateDto {
+  const FsrsSchedulerUpdateDto({
     required this.due,
     required this.scheduledDays,
     required this.elapsedDays,

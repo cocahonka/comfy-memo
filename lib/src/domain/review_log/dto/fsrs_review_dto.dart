@@ -7,10 +7,10 @@ final class FsrsReviewDto {
   const FsrsReviewDto({
     required this.review,
     required this.rating,
-    required this.state,
+    required this.learningState,
   });
 
   final DateTime review;
   final LearningRating rating;
-  final LearningState state;
+  final LearningState learningState;
 }
