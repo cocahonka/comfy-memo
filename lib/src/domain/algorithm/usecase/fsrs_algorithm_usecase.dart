@@ -28,13 +28,14 @@ final class FsrsAlgorithmUsecase {
     required LearningRating rating,
     DateTime? repeatTime,
   }) {
+    final now = repeatTime ?? DateTime.now().toUtc();
     final inputCard = _toCard(scheduler);
     final inputRating = _toRating(rating);
 
     final (:card, :reviewLog) = _algorithm.reviewCard(
       card: inputCard,
       rating: inputRating,
-      repeatTime: repeatTime,
+      repeatTime: now,
     );
 
     final schedulerUpdateDto = _toSchedulerUpdateDto(card);
