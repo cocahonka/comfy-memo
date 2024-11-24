@@ -51,4 +51,17 @@ final class FsrsSchedulerUpdateDto {
           stability == other.stability &&
           difficulty == other.difficulty &&
           learningState == other.learningState;
+
+  @override
+  String toString() => 'FsrsSchedulerUpdateDto('
+      'due: $due, '
+      'scheduledDays: $scheduledDays, '
+      'elapsedDays: $elapsedDays, '
+      'reps: $reps, '
+      'lapses: $lapses, '
+      'lastReview: $lastReview, '
+      'stability: $stability, '
+      'difficulty: $difficulty, '
+      'learningState: $learningState'
+      ')';
 }

@@ -14,18 +14,7 @@ base class ReviewLogEntity {
   final LearningRating rating;
 
   @override
-  int get hashCode => Object.hashAll([
-        cardId,
-        review,
-        rating,
-      ]);
-
-  @override
-  String toString() => 'ReviewLogEntity('
-      'cardId: $cardId, '
-      'review: $review, '
-      'rating: $rating'
-      ')';
+  int get hashCode => Object.hashAll([cardId, review, rating]);
 
   @override
   bool operator ==(Object other) =>
@@ -34,4 +23,11 @@ base class ReviewLogEntity {
           cardId == other.cardId &&
           review == other.review &&
           rating == other.rating;
+
+  @override
+  String toString() => 'ReviewLogEntity('
+      'cardId: $cardId, '
+      'review: $review, '
+      'rating: $rating'
+      ')';
 }

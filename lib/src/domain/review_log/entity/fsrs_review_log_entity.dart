@@ -14,22 +14,8 @@ final class FsrsReviewLogEntity extends ReviewLogEntity {
   final LearningState learningState;
 
   @override
-  int get hashCode => Object.hashAll([
-        cardId,
-        review,
-        rating,
-        reviewLogId,
-        learningState,
-      ]);
-
-  @override
-  String toString() => 'FsrsReviewLogEntity('
-      'cardId: $cardId, '
-      'review: $review, '
-      'rating: $rating, '
-      'reviewLogId: $reviewLogId, '
-      'learningState: $learningState'
-      ')';
+  int get hashCode =>
+      Object.hashAll([cardId, review, rating, reviewLogId, learningState]);
 
   @override
   bool operator ==(Object other) =>
@@ -40,4 +26,13 @@ final class FsrsReviewLogEntity extends ReviewLogEntity {
           rating == other.rating &&
           reviewLogId == other.reviewLogId &&
           learningState == other.learningState;
+
+  @override
+  String toString() => 'FsrsReviewLogEntity('
+      'cardId: $cardId, '
+      'review: $review, '
+      'rating: $rating, '
+      'reviewLogId: $reviewLogId, '
+      'learningState: $learningState'
+      ')';
 }

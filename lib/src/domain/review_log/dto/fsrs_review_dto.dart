@@ -24,4 +24,11 @@ final class FsrsReviewDto {
           review == other.review &&
           rating == other.rating &&
           learningState == other.learningState;
+
+  @override
+  String toString() => 'FsrsReviewDto('
+      'review: $review, '
+      'rating: $rating, '
+      'learningState: $learningState'
+      ')';
 }

@@ -19,13 +19,8 @@ base class FlashcardEntity {
   final SelfVerifyType selfVerifyType;
 
   @override
-  int get hashCode => Object.hashAll([
-        id,
-        title,
-        term,
-        definition,
-        selfVerifyType,
-      ]);
+  int get hashCode =>
+      Object.hashAll([id, title, term, definition, selfVerifyType]);
 
   @override
   bool operator ==(Object other) =>
