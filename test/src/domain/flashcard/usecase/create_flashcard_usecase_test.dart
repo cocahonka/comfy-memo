@@ -89,10 +89,12 @@ void main() {
 
     await usecase(flashcardCreateData: dto);
 
-    verify(mockFlashcardRepository.create(any)).called(1);
-    verifyNoMoreInteractions(mockFlashcardRepository);
+    verifyInOrder([
+      mockFlashcardRepository.create(dto),
+      mockSchedulerEntryRepository.create(0),
+    ]);
 
-    verify(mockSchedulerEntryRepository.create(any)).called(1);
+    verifyNoMoreInteractions(mockFlashcardRepository);
     verifyNoMoreInteractions(mockSchedulerEntryRepository);
   });
 }

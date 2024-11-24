@@ -33,7 +33,7 @@ final class EditFlashcardUsecase {
       );
     }
 
-    return _flashcardRepository.update(
+    await _flashcardRepository.update(
       flashcardIdForEditing,
       flashcardEditData,
     );

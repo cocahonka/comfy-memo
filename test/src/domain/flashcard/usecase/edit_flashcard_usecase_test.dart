@@ -23,6 +23,8 @@ void main() {
     );
   });
 
+  tearDown(resetMockitoState);
+
   test(
       'EditFlashcardUsecase throws FlashcardValidationException '
       'when title is empty', () async {
@@ -84,7 +86,7 @@ void main() {
       flashcardEditData: dto,
     );
 
-    verify(mockFlashcardRepository.update(any, any)).called(1);
+    verify(mockFlashcardRepository.update(0, dto)).called(1);
     verifyNoMoreInteractions(mockFlashcardRepository);
   });
 }

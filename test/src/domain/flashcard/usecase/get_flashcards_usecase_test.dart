@@ -1,3 +1,4 @@
+import 'package:comfy_memo/src/domain/algorithm/entity/algorithm_type.dart';
 import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:comfy_memo/src/domain/flashcard/maping/maping.dart';
@@ -22,7 +23,8 @@ void main() {
   late MockFlashcardRepository mockFlashcardRepository;
   late MockSchedulerEntryRepository mockSchedulerEntryRepository;
   late MockPreferencesRepository mockPreferencesRepository;
-  late DateTime mockDue;
+
+  late DateTime dummyDue;
 
   setUp(() {
     mockFlashcardRepository = MockFlashcardRepository();
@@ -33,16 +35,18 @@ void main() {
       schedulerEntryRepository: mockSchedulerEntryRepository,
       preferencesRepository: mockPreferencesRepository,
     );
-    mockDue = DateTime.now();
+
+    dummyDue = DateTime.now().toUtc();
+
     provideDummy(
       FsrsSchedulerEntryEntity(
         cardId: 0,
-        due: mockDue,
+        due: dummyDue,
         scheduledDays: 0,
         elapsedDays: 0,
         reps: 0,
         lapses: 0,
-        lastReview: mockDue,
+        lastReview: null,
         schedulerId: 0,
         stability: 0,
         difficulty: 0,
@@ -53,7 +57,11 @@ void main() {
 
   tearDown(resetMockitoState);
 
-  test('GetFlashcardsUsecase emits transformed flashcards', () async {
+  test(
+      'GetFlashcardsUsecase emits transformed flashcards '
+      'when the algorithm preference of all cards is fsrs', () async {
+    provideDummy(AlgorithmType.fsrs);
+
     const flashcards = [
       FlashcardEntity(
         id: 0,
@@ -64,10 +72,10 @@ void main() {
       ),
       FlashcardEntity(
         id: 1,
-        title: 'title',
-        term: 'term',
-        definition: 'definition',
-        selfVerifyType: SelfVerifyType.none,
+        title: 'another title',
+        term: 'another term',
+        definition: 'another definition',
+        selfVerifyType: SelfVerifyType.written,
       ),
     ];
 
@@ -80,16 +88,16 @@ void main() {
     await expectLater(
       stream,
       emitsInOrder([
-        flashcards.map((flashcard) => flashcard.withDue(mockDue)).toList(),
+        flashcards.map((flashcard) => flashcard.withDue(dummyDue)).toList(),
       ]),
     );
 
     verifyInOrder([
       mockFlashcardRepository.flashcards,
-      mockPreferencesRepository.fetchAlgorithmType(any),
-      mockPreferencesRepository.fetchAlgorithmType(any),
-      mockSchedulerEntryRepository.fetchFsrs(any),
-      mockSchedulerEntryRepository.fetchFsrs(any),
+      mockPreferencesRepository.fetchAlgorithmType(0),
+      mockPreferencesRepository.fetchAlgorithmType(1),
+      mockSchedulerEntryRepository.fetchFsrs(0),
+      mockSchedulerEntryRepository.fetchFsrs(1),
     ]);
     verifyNoMoreInteractions(mockFlashcardRepository);
     verifyNoMoreInteractions(mockPreferencesRepository);
