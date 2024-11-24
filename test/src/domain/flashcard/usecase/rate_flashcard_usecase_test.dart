@@ -62,7 +62,8 @@ void main() {
 
   test(
     'RateFlashcardUsecase correct working with dependencies '
-    'and return expected value when algorithm type is fsrs',
+    'and return expected value '
+    'when algorithm type is fsrs',
     () async {
       provideDummy(AlgorithmType.fsrs);
 
