@@ -16,6 +16,18 @@ final class FlashcardEditDto {
   final SelfVerifyType? selfVerifyType;
 
   @override
+  int get hashCode => Object.hashAll([title, term, definition, selfVerifyType]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FlashcardEditDto &&
+          title == other.title &&
+          term == other.term &&
+          definition == other.definition &&
+          selfVerifyType == other.selfVerifyType;
+
+  @override
   String toString() => 'FlashcardEditDto('
       'title: $title, '
       'term: $term, '

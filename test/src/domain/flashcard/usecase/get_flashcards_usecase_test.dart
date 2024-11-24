@@ -1,4 +1,4 @@
-import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm.dart';
+import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:comfy_memo/src/domain/flashcard/maping/maping.dart';
 import 'package:comfy_memo/src/domain/flashcard/repository/repository.dart';
