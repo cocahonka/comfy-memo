@@ -26,6 +26,7 @@ final class RateFlashcardUsecase {
   Future<DateTime> call({
     required int cardId,
     required LearningRating rating,
+    DateTime? repeatTime,
   }) async {
     final algorithmType =
         await _preferencesRepository.fetchAlgorithmType(cardId);
@@ -33,8 +34,11 @@ final class RateFlashcardUsecase {
     switch (algorithmType) {
       case AlgorithmType.fsrs:
         final scheduler = await _schedulerEntryRepository.fetchFsrs(cardId);
-        final (:schedulerUpdateDto, :reviewDto) =
-            _fsrsAlgorithmUsecase(rating: rating, scheduler: scheduler);
+        final (:schedulerUpdateDto, :reviewDto) = _fsrsAlgorithmUsecase(
+          rating: rating,
+          scheduler: scheduler,
+          repeatTime: repeatTime,
+        );
 
         await _schedulerEntryRepository.updateFsrs(cardId, schedulerUpdateDto);
         await _reviewLogRepository.logFsrs(cardId, reviewDto);
