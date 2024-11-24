@@ -24,4 +24,31 @@ final class FsrsSchedulerUpdateDto {
   final double stability;
   final double difficulty;
   final LearningState learningState;
+
+  @override
+  int get hashCode => Object.hashAll([
+        due,
+        scheduledDays,
+        elapsedDays,
+        reps,
+        lapses,
+        lastReview,
+        stability,
+        difficulty,
+        learningState,
+      ]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FsrsSchedulerUpdateDto &&
+          due == other.due &&
+          scheduledDays == other.scheduledDays &&
+          elapsedDays == other.elapsedDays &&
+          reps == other.reps &&
+          lapses == other.lapses &&
+          lastReview == other.lastReview &&
+          stability == other.stability &&
+          difficulty == other.difficulty &&
+          learningState == other.learningState;
 }

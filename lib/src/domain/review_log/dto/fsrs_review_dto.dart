@@ -13,4 +13,15 @@ final class FsrsReviewDto {
   final DateTime review;
   final LearningRating rating;
   final LearningState learningState;
+
+  @override
+  int get hashCode => Object.hashAll([review, rating, learningState]);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FsrsReviewDto &&
+          review == other.review &&
+          rating == other.rating &&
+          learningState == other.learningState;
 }
