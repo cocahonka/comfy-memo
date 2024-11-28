@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class MaterialTheme {
+final class MaterialTheme {
   const MaterialTheme(this.textTheme);
 
   final TextTheme textTheme;
