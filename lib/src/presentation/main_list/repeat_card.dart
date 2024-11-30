@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 @immutable
-final class RepeatCard extends StatelessWidget {
+base class RepeatCard extends StatelessWidget {
   const RepeatCard({
     required this.title,
     required this.term,
-    required this.isRepeatCard,
+    required this.isRepeatTime,
     required VoidCallback onOpen,
     required VoidCallback onEdit,
     super.key,
@@ -14,7 +14,7 @@ final class RepeatCard extends StatelessWidget {
 
   final String title;
   final String term;
-  final bool isRepeatCard;
+  final bool isRepeatTime;
   final VoidCallback _onOpen;
   final VoidCallback _onEdit;
 
@@ -42,7 +42,7 @@ final class RepeatCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 12),
                 child: RepeatCardBody(term: term),
               ),
-              if (isRepeatCard)
+              if (isRepeatTime)
                 const Padding(
                   padding: EdgeInsets.only(top: 16),
                   child: RepeatCardNotification(),
@@ -56,7 +56,7 @@ final class RepeatCard extends StatelessWidget {
 }
 
 @immutable
-final class RepeatCardHeadline extends StatelessWidget {
+base class RepeatCardHeadline extends StatelessWidget {
   const RepeatCardHeadline({
     required this.title,
     required VoidCallback onEdit,
@@ -99,7 +99,7 @@ final class RepeatCardHeadline extends StatelessWidget {
 }
 
 @immutable
-final class RepeatCardBody extends StatelessWidget {
+base class RepeatCardBody extends StatelessWidget {
   const RepeatCardBody({required this.term, super.key});
 
   final String term;
@@ -119,7 +119,7 @@ final class RepeatCardBody extends StatelessWidget {
 }
 
 @immutable
-final class RepeatCardNotification extends StatelessWidget {
+base class RepeatCardNotification extends StatelessWidget {
   const RepeatCardNotification({super.key});
 
   @override
