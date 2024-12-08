@@ -1,6 +1,8 @@
 import 'package:comfy_memo/src/domain/flashcard/dto/flashcard_create_dto.dart';
 import 'package:comfy_memo/src/domain/flashcard/dto/flashcard_edit_dto.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
+import 'package:comfy_memo/src/presentation/add_card/dialogs.dart';
+import 'package:comfy_memo/src/presentation/add_card/self_verify_type_selector.dart';
 import 'package:comfy_memo/src/presentation/common/custom_text_field.dart';
 import 'package:comfy_memo/src/presentation/common/icon_button_with_custom_background.dart';
 import 'package:flutter/material.dart';
@@ -272,119 +274,6 @@ base class _AddCardScreenState extends State<AddCardScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-@immutable
-base class DiscardDialog extends StatelessWidget {
-  const DiscardDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return AlertDialog(
-      title: Text(
-        'Discard draft?',
-        style: theme.textTheme.bodyMedium
-            ?.copyWith(color: theme.colorScheme.onSurface),
-      ),
-      backgroundColor: theme.colorScheme.surfaceContainerHigh,
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Discard'),
-        ),
-      ],
-    );
-  }
-}
-
-@immutable
-base class DeleteDialog extends StatelessWidget {
-  const DeleteDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return AlertDialog(
-      title: const Text('Delete the card?'),
-      content: Text(
-        'The card will be deleted with all information '
-        'with no possibility of recovery!',
-        style: theme.textTheme.bodyMedium?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
-      ),
-      backgroundColor: theme.colorScheme.surfaceContainerHigh,
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Delete'),
-        ),
-      ],
-    );
-  }
-}
-
-@immutable
-base class SelfVerifyTypeSelector extends StatefulWidget {
-  const SelfVerifyTypeSelector({
-    required this.initialValue,
-    required this.onSelectionChanged,
-    super.key,
-  });
-
-  final ValueSetter<SelfVerifyType> onSelectionChanged;
-  final SelfVerifyType initialValue;
-
-  @override
-  State<SelfVerifyTypeSelector> createState() => _SelfVerifyTypeSelectorState();
-}
-
-base class _SelfVerifyTypeSelectorState extends State<SelfVerifyTypeSelector> {
-  late SelfVerifyType _selected = widget.initialValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text('Self Verify', style: theme.textTheme.titleLarge),
-        SegmentedButton<SelfVerifyType>(
-          segments: const [
-            ButtonSegment(
-              value: SelfVerifyType.none,
-              label: Text('None'),
-            ),
-            ButtonSegment(
-              value: SelfVerifyType.written,
-              label: Text('Write'),
-            ),
-          ],
-          selected: {_selected},
-          onSelectionChanged: (newSelection) {
-            setState(() {
-              _selected = newSelection.first;
-              widget.onSelectionChanged(_selected);
-            });
-          },
-        ),
-      ],
     );
   }
 }
