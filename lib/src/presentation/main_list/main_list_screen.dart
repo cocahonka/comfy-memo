@@ -1,10 +1,43 @@
+import 'dart:async';
+
 import 'package:comfy_memo/src/common/constants.dart';
+import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
+import 'package:comfy_memo/src/presentation/add_card/add_card_screen.dart';
 import 'package:comfy_memo/src/presentation/main_list/repeat_card.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-final class MainListScreen extends StatelessWidget {
+base class MainListScreen extends StatelessWidget {
   const MainListScreen({super.key});
+
+  Future<void> _onAdd(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog.fullscreen(
+        child: AddCardScreen.createMode(
+          onCreate: (_) {},
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onEdit(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog.fullscreen(
+        child: AddCardScreen.editMode(
+          onEdit: (_) {},
+          onDelete: () {},
+          titleInitialValue: 'Hello world',
+          termInitialValue: 'termInitialValue',
+          definitionInitialValue: 'definitionInitialValue',
+          selfVerifyTypeInitialValue: SelfVerifyType.written,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +50,9 @@ final class MainListScreen extends StatelessWidget {
             'Tortor etiam sit diam feugiat. '
             'Egestas pellentesque lobortis risus nec in a pulvinar. '
             'Ultrices etiam amet netus elit. ',
-        isRepeatCard: true,
+        isRepeatTime: true,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur. '
@@ -30,7 +63,7 @@ final class MainListScreen extends StatelessWidget {
             'Amet sit dolor id velit. '
             'Odio hac pharetra ultricies in. '
             'Amet quam donec lacus maecenas id vitae diam vitae tincidunt.',
-        isRepeatCard: true,
+        isRepeatTime: true,
         onOpen: () {},
         onEdit: () {},
       ),
@@ -38,9 +71,9 @@ final class MainListScreen extends StatelessWidget {
         title: 'Lorem ipsum dolor sit amet consectetur',
         term: 'Lorem ipsum dolor sit amet consectetur. '
             'Faucibus euismod donec urna eget in dui amet ultricies neque.',
-        isRepeatCard: false,
+        isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur.',
@@ -49,9 +82,9 @@ final class MainListScreen extends StatelessWidget {
             'Integer pulvinar metus pretium diam a felis quis eu elementum. '
             'Mi cras suspendisse risus nec. '
             'Justo nulla facilisi vulputate neque nec fringilla. ',
-        isRepeatCard: false,
+        isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur.',
@@ -60,9 +93,9 @@ final class MainListScreen extends StatelessWidget {
             'Integer pulvinar metus pretium diam a felis quis eu elementum. '
             'Mi cras suspendisse risus nec. '
             'Justo nulla facilisi vulputate neque nec fringilla. ',
-        isRepeatCard: false,
+        isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
     ];
 
@@ -75,8 +108,8 @@ final class MainListScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         foregroundColor: colorScheme.onTertiaryContainer,
         backgroundColor: colorScheme.tertiaryContainer,
-        child: const Icon(Icons.add),
-        onPressed: () {},
+        child: const Icon(Icons.add_rounded),
+        onPressed: () async => _onAdd(context),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
