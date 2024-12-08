@@ -73,7 +73,7 @@ base class MainListScreen extends StatelessWidget {
             'Faucibus euismod donec urna eget in dui amet ultricies neque.',
         isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur.',
@@ -84,7 +84,7 @@ base class MainListScreen extends StatelessWidget {
             'Justo nulla facilisi vulputate neque nec fringilla. ',
         isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur.',
@@ -95,7 +95,7 @@ base class MainListScreen extends StatelessWidget {
             'Justo nulla facilisi vulputate neque nec fringilla. ',
         isRepeatTime: false,
         onOpen: () {},
-        onEdit: () {},
+        onEdit: () async => _onEdit(context),
       ),
     ];
 
