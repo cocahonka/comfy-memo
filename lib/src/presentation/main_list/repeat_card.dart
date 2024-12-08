@@ -28,8 +28,8 @@ base class RepeatCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: _onOpen,
-        splashColor: theme.colorScheme.primary.withOpacity(0.2),
-        highlightColor: theme.colorScheme.primary.withOpacity(0.2),
+        splashColor: theme.colorScheme.primary.withOpacity(0.1),
+        highlightColor: theme.colorScheme.primary.withOpacity(0.1),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           child: Column(
