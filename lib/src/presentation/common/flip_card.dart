@@ -43,7 +43,7 @@ class _FlipCardState extends State<FlipCard> {
               builder: (context, value, child) {
                 return RotationY(
                   angle: value + 180,
-                  child: value >= -90 ? const SizedBox.shrink() : child!,
+                  child: Offstage(offstage: value >= -90, child: child!),
                 );
               },
             ),
@@ -55,7 +55,7 @@ class _FlipCardState extends State<FlipCard> {
               builder: (context, value, child) {
                 return RotationY(
                   angle: value,
-                  child: value < -90 ? const SizedBox.shrink() : child!,
+                  child: Offstage(offstage: value < -90, child: child!),
                 );
               },
             ),
