@@ -126,7 +126,7 @@ base class _AddCardScreenState extends State<AddCardScreen> {
     return 'Definition is required';
   }
 
-  void _onSave(BuildContext context) {
+  void _onSave() {
     final isValid = formKey.currentState?.validate() ?? false;
     if (!isValid) return;
 
@@ -207,7 +207,7 @@ base class _AddCardScreenState extends State<AddCardScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: FilledButton(
-              onPressed: () => _onSave(context),
+              onPressed: _onSave,
               child: const Text('Save'),
             ),
           ),
