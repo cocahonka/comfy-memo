@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 typedef EditCallback = void Function(FlashcardEditDto);
 typedef CreateCallback = void Function(FlashcardCreateDto);
 
-@immutable
 base class AddCardScreen extends StatefulWidget {
   const AddCardScreen._internal({
     required this.isCreateMode,

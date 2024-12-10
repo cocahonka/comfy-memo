@@ -2,7 +2,6 @@ import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
 import 'package:comfy_memo/src/presentation/repeat/learning_rating_selector.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class TermCard extends StatelessWidget {
   const TermCard({
     required this.aspectRatio,
@@ -31,7 +30,6 @@ base class TermCard extends StatelessWidget {
   }
 }
 
-@immutable
 base class TermCardTermSide extends StatelessWidget {
   const TermCardTermSide({
     required this.aspectRatio,
@@ -59,7 +57,6 @@ base class TermCardTermSide extends StatelessWidget {
   }
 }
 
-@immutable
 base class TermCardRateSide extends StatelessWidget {
   const TermCardRateSide({
     required this.aspectRatio,

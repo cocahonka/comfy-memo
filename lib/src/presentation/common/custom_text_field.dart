@@ -1,7 +1,6 @@
 import 'package:comfy_memo/src/presentation/common/deffered_value_listenable_builder.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     required this.label,

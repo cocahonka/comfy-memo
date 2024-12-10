@@ -7,7 +7,6 @@ import 'package:comfy_memo/src/presentation/main_list/repeat_card.dart';
 import 'package:comfy_memo/src/presentation/repeat/repeat_screen.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class MainListScreen extends StatelessWidget {
   const MainListScreen({super.key});
 

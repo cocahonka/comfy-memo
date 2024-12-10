@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-@immutable
 base class FlipCard extends StatefulWidget {
   const FlipCard({
     required this.front,
@@ -78,7 +77,6 @@ class _FlipCardState extends State<FlipCard> {
   }
 }
 
-@immutable
 base class RotationY extends StatelessWidget {
   const RotationY({
     required this.child,

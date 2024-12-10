@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-@immutable
 base class DiscardDialog extends StatelessWidget {
   const DiscardDialog({super.key});
 
@@ -29,7 +28,6 @@ base class DiscardDialog extends StatelessWidget {
   }
 }
 
-@immutable
 base class DeleteDialog extends StatelessWidget {
   const DeleteDialog({super.key});
 

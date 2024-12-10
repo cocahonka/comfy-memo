@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-@immutable
 base class ExitWithoutRateDialog extends StatelessWidget {
   const ExitWithoutRateDialog({super.key});
 

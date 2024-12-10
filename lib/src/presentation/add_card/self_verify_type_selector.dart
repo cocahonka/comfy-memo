@@ -1,7 +1,6 @@
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class SelfVerifyTypeSelector extends StatefulWidget {
   const SelfVerifyTypeSelector({
     required this.initialValue,

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 typedef RateCallback = void Function(LearningRating);
 
-@immutable
 base class RepeatScreen extends StatefulWidget {
   const RepeatScreen({
     required this.title,
@@ -27,7 +26,7 @@ base class RepeatScreen extends StatefulWidget {
   State<RepeatScreen> createState() => _RepeatScreenState();
 }
 
-class _RepeatScreenState extends State<RepeatScreen> {
+base class _RepeatScreenState extends State<RepeatScreen> {
   final TextEditingController _controller = TextEditingController();
   LearningRating? _learningRating;
   bool _isPreview = true;
@@ -153,7 +152,6 @@ class _RepeatScreenState extends State<RepeatScreen> {
   }
 }
 
-@immutable
 base class RepeatScreenAppBarBottomTitle extends StatelessWidget
     implements PreferredSizeWidget {
   const RepeatScreenAppBarBottomTitle({required this.title, super.key});

@@ -1,7 +1,6 @@
 import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class LearningRatingSelector extends StatefulWidget {
   const LearningRatingSelector({
     required this.onSelectionChanged,

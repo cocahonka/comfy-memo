@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-@immutable
 base class RepeatCard extends StatelessWidget {
   const RepeatCard({
     required this.title,
@@ -55,7 +54,6 @@ base class RepeatCard extends StatelessWidget {
   }
 }
 
-@immutable
 base class RepeatCardHeadline extends StatelessWidget {
   const RepeatCardHeadline({
     required this.title,
@@ -98,7 +96,6 @@ base class RepeatCardHeadline extends StatelessWidget {
   }
 }
 
-@immutable
 base class RepeatCardBody extends StatelessWidget {
   const RepeatCardBody({required this.term, super.key});
 
@@ -118,7 +115,6 @@ base class RepeatCardBody extends StatelessWidget {
   }
 }
 
-@immutable
 base class RepeatCardNotification extends StatelessWidget {
   const RepeatCardNotification({super.key});
 
