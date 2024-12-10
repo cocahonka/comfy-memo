@@ -24,7 +24,7 @@ base class FlipCard extends StatefulWidget {
   State<FlipCard> createState() => _FlipCardState();
 }
 
-class _FlipCardState extends State<FlipCard> {
+base class _FlipCardState extends State<FlipCard> {
   bool _inProgress = false;
   bool _isFlipped = false;
 
