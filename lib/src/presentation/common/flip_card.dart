@@ -9,6 +9,8 @@ base class FlipCard extends StatefulWidget {
     required this.back,
     required this.duration,
     required this.curve,
+    this.onTapCallback,
+    this.isDiscrete = true,
     super.key,
   });
 
@@ -16,12 +18,15 @@ base class FlipCard extends StatefulWidget {
   final Widget back;
   final Duration duration;
   final Curve curve;
+  final VoidCallback? onTapCallback;
+  final bool isDiscrete;
 
   @override
   State<FlipCard> createState() => _FlipCardState();
 }
 
 class _FlipCardState extends State<FlipCard> {
+  bool _inProgress = false;
   bool _isFlipped = false;
 
   @override
@@ -29,6 +34,11 @@ class _FlipCardState extends State<FlipCard> {
     return RepaintBoundary(
       child: GestureDetector(
         onTap: () {
+          if (widget.isDiscrete && _inProgress) return;
+
+          _inProgress = true;
+          widget.onTapCallback?.call();
+
           setState(() {
             _isFlipped = !_isFlipped;
           });
@@ -40,6 +50,7 @@ class _FlipCardState extends State<FlipCard> {
               tween: Tween<double>(begin: 0, end: _isFlipped ? -180 : 0),
               duration: widget.duration,
               child: widget.back,
+              onEnd: () => _inProgress = false,
               builder: (context, value, child) {
                 return RotationY(
                   angle: value + 180,
@@ -49,6 +60,7 @@ class _FlipCardState extends State<FlipCard> {
             ),
             TweenAnimationBuilder(
               curve: widget.curve,
+              onEnd: () => _inProgress = false,
               tween: Tween<double>(begin: 0, end: _isFlipped ? -180 : 0),
               duration: widget.duration,
               child: widget.front,
