@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class DefferedValueListenableBuilder<T> extends StatefulWidget {
   const DefferedValueListenableBuilder({
     required this.valueListenable,

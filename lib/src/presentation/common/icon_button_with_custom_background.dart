@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-@immutable
 base class IconButtonWithCustomBackground extends StatelessWidget {
   const IconButtonWithCustomBackground({
     required IconButton iconButton,

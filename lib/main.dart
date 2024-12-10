@@ -18,7 +18,6 @@ ColorScheme _adaptDynamicColorScheme(ColorScheme colorScheme) {
   return schemeBase.harmonized();
 }
 
-@immutable
 final class App extends StatelessWidget {
   const App({super.key});
 

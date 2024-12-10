@@ -4,9 +4,9 @@ import 'package:comfy_memo/src/common/constants.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:comfy_memo/src/presentation/add_card/add_card_screen.dart';
 import 'package:comfy_memo/src/presentation/main_list/repeat_card.dart';
+import 'package:comfy_memo/src/presentation/repeat/repeat_screen.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 base class MainListScreen extends StatelessWidget {
   const MainListScreen({super.key});
 
@@ -39,6 +39,27 @@ base class MainListScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _onOpen(BuildContext context) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => RepeatScreen(
+          title: 'Lorem ipsum dolor sit amet consectetur. '
+              'Diam dui nunc amet pharetra magna vitae',
+          term: 'Lorem ipsum dolor sit amet consectetur. '
+                  'Ac sit sit tellus velit quam consequat '
+                  'eleifend dapibus ipsum. '
+                  'Integer pulvinar metus pretium diam a '
+                  'felis quis eu elementum. '
+                  'Mi cras suspendisse risus nec. '
+                  'Justo nulla facilisi vulputate neque nec fringilla. ' *
+              20,
+          selfVerifyType: SelfVerifyType.written,
+          onRate: (_) {},
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -51,7 +72,7 @@ base class MainListScreen extends StatelessWidget {
             'Egestas pellentesque lobortis risus nec in a pulvinar. '
             'Ultrices etiam amet netus elit. ',
         isRepeatTime: true,
-        onOpen: () {},
+        onOpen: () async => _onOpen(context),
         onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
@@ -64,15 +85,15 @@ base class MainListScreen extends StatelessWidget {
             'Odio hac pharetra ultricies in. '
             'Amet quam donec lacus maecenas id vitae diam vitae tincidunt.',
         isRepeatTime: true,
-        onOpen: () {},
-        onEdit: () {},
+        onOpen: () async => _onOpen(context),
+        onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
         title: 'Lorem ipsum dolor sit amet consectetur',
         term: 'Lorem ipsum dolor sit amet consectetur. '
             'Faucibus euismod donec urna eget in dui amet ultricies neque.',
         isRepeatTime: false,
-        onOpen: () {},
+        onOpen: () async => _onOpen(context),
         onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
@@ -83,7 +104,7 @@ base class MainListScreen extends StatelessWidget {
             'Mi cras suspendisse risus nec. '
             'Justo nulla facilisi vulputate neque nec fringilla. ',
         isRepeatTime: false,
-        onOpen: () {},
+        onOpen: () async => _onOpen(context),
         onEdit: () async => _onEdit(context),
       ),
       RepeatCard(
@@ -94,7 +115,7 @@ base class MainListScreen extends StatelessWidget {
             'Mi cras suspendisse risus nec. '
             'Justo nulla facilisi vulputate neque nec fringilla. ',
         isRepeatTime: false,
-        onOpen: () {},
+        onOpen: () async => _onOpen(context),
         onEdit: () async => _onEdit(context),
       ),
     ];
