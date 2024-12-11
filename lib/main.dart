@@ -1,12 +1,28 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:comfy_memo/src/common/composition_root.dart';
 import 'package:comfy_memo/src/common/constants.dart';
+import 'package:comfy_memo/src/common/dependencies_scope.dart';
 import 'package:comfy_memo/src/presentation/main_list/main_list_screen.dart';
 import 'package:comfy_memo/src/presentation/theme/theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const App());
+Future<void> main() async {
+  final dependencies = await CompositionRoot().compose();
+  runZonedGuarded(
+    () => runApp(
+      DependenciesScope(
+        dependencies: dependencies,
+        child: const App(),
+      ),
+    ),
+    (error, stack) {
+      log('Uncaught error: $error\n$stack', name: 'Root Zone');
+    },
+  );
 }
 
 ColorScheme _adaptDynamicColorScheme(ColorScheme colorScheme) {
