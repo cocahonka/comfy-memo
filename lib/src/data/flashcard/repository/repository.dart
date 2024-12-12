@@ -12,26 +12,30 @@ base class FlashcardRepository implements IFlashcardRepository {
   FlashcardRepository({
     required FlashcardInMemoryDataSource source,
   })  : _source = source,
-        _controller = StreamController.broadcast();
+        _controller = StreamController.broadcast() {
+    _controller.onListen = () {
+      _controller.add(_source.fetchAll());
+    };
+  }
 
   final FlashcardInMemoryDataSource _source;
   final StreamController<List<FlashcardEntity>> _controller;
 
-  Future<void> _updateController() async {
+  void _updateController() {
     _controller.sink.add(_source.fetchAll());
   }
 
   @override
   Future<FlashcardEntity> create(FlashcardCreateDto params) async {
     final model = _source.create(params);
-    await _updateController();
+    _updateController();
     return model;
   }
 
   @override
   Future<void> delete(int id) async {
     _source.delete(id);
-    await _updateController();
+    _updateController();
   }
 
   @override
@@ -49,7 +53,7 @@ base class FlashcardRepository implements IFlashcardRepository {
 
   @override
   Future<void> update(int id, FlashcardEditDto params) async {
-    await _updateController();
-    return _source.update(id, params);
+    _source.update(id, params);
+    _updateController();
   }
 }
