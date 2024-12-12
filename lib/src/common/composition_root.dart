@@ -43,6 +43,7 @@ final class CompositionRoot {
     );
     final fsrsAlgorithmUsecase = FsrsAlgorithmUsecase();
     final rateFlashcardUsecase = RateFlashcardUsecase(
+      flashcardRepository: flashcardRepository,
       schedulerEntryRepository: schedulerEntryRepository,
       reviewLogRepository: reviewLogRepository,
       preferencesRepository: preferencesRepository,

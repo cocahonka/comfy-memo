@@ -8,6 +8,7 @@ abstract interface class IFlashcardRepository {
   Future<List<FlashcardEntity>> fetchAll();
   Future<FlashcardEntity> fetch(int id);
   Stream<List<FlashcardEntity>> get flashcards;
+  Future<void> updateStream();
 
   Future<void> update(int id, FlashcardEditDto params);
 
