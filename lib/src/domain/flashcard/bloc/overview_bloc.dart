@@ -56,9 +56,9 @@ base class FlashcardOverviewBloc
   FlashcardOverviewBloc({required GetFlashcardsUsecase getFlashcardsUsecase})
       : _getFlashcardsUsecase = getFlashcardsUsecase,
         super(const FlashcardOverviewState$Loading()) {
-    stateContoller.onListen = () {
+    stateContoller.onListen = () async {
       stateContoller.add(initial);
-      _subscribeUsecase();
+      await _subscribeUsecase();
     };
   }
 
@@ -90,7 +90,8 @@ base class FlashcardOverviewBloc
     );
   }
 
-  void _subscribeUsecase() {
+  Future<void> _subscribeUsecase() async {
+    await _usecaseSubscription?.cancel();
     _usecaseSubscription ??= _getFlashcardsUsecase().listen(
       (flashcards) {
         sink.add(FlashcardOverviewEvent$OnData(flashcards: flashcards));
