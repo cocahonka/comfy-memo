@@ -64,6 +64,7 @@ base class FlashcardOverviewBloc
 
   final GetFlashcardsUsecase _getFlashcardsUsecase;
   StreamSubscription<List<FlashcardWithDueEntity>>? _usecaseSubscription;
+  Timer? _dueTimer;
 
   @override
   Stream<FlashcardOverviewState> mapEventToState(
@@ -78,6 +79,7 @@ base class FlashcardOverviewBloc
   Stream<FlashcardOverviewState> _onData(
     FlashcardOverviewEvent$OnData event,
   ) async* {
+    _scheduleNextDue(event.flashcards);
     yield FlashcardOverviewState$Idle(flashcards: event.flashcards);
   }
 
@@ -108,9 +110,39 @@ base class FlashcardOverviewBloc
     );
   }
 
+  void _scheduleNextDue(List<FlashcardWithDueEntity> flashcards) {
+    _dueTimer?.cancel();
+
+    final now = DateTime.now().toUtc();
+    final upcomingDueDates = flashcards
+        .map((card) => card.due)
+        .where((due) => due.isAfter(now))
+        .toList();
+
+    if (upcomingDueDates.isEmpty) {
+      return;
+    }
+
+    upcomingDueDates.sort();
+    final nearestDue = upcomingDueDates.first;
+    final duration = nearestDue.difference(now);
+
+    if (duration.isNegative || duration == Duration.zero) {
+      _onDueReached();
+      return;
+    }
+
+    _dueTimer = Timer(duration, _onDueReached);
+  }
+
+  void _onDueReached() {
+    sink.add(FlashcardOverviewEvent$OnData(flashcards: state.flashcards));
+  }
+
   @override
   Future<void> dispose() {
     _usecaseSubscription?.cancel();
+    _dueTimer?.cancel();
     return super.dispose();
   }
 }
