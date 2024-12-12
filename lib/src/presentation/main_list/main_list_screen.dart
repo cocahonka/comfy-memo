@@ -62,15 +62,7 @@ base class MainListScreen extends StatelessWidget {
   ) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (context) => RepeatScreen(
-          title: flashcard.title,
-          term: flashcard.term,
-          definition: flashcard.definition,
-          selfVerifyType: flashcard.selfVerifyType,
-          onRate: (rating) {
-            // Todo implement this
-          },
-        ),
+        builder: (context) => RepeatScreen(entity: flashcard),
       ),
     );
   }

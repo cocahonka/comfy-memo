@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:comfy_memo/src/common/dependencies_scope.dart';
 import 'package:comfy_memo/src/domain/flashcard/bloc/edit_bloc.dart';
 import 'package:comfy_memo/src/domain/flashcard/bloc/overview_bloc.dart';
+import 'package:comfy_memo/src/domain/flashcard/bloc/repeat_bloc.dart';
 import 'package:flutter/widgets.dart';
 
 base class BlocScope extends StatefulWidget {
@@ -18,8 +19,9 @@ base class BlocScope extends StatefulWidget {
 }
 
 base class _BlocScopeState extends State<BlocScope> {
-  late final FlashcardEditBloc _editBloc;
-  late final FlashcardOverviewBloc _overviewBloc;
+  late FlashcardEditBloc _editBloc;
+  late FlashcardOverviewBloc _overviewBloc;
+  late FlashcardRepeatBloc _repeatBloc;
 
   @override
   void didChangeDependencies() {
@@ -31,6 +33,9 @@ base class _BlocScopeState extends State<BlocScope> {
     );
     _overviewBloc = FlashcardOverviewBloc(
       getFlashcardsUsecase: dependencies.getFlashcardsUsecase,
+    );
+    _repeatBloc = FlashcardRepeatBloc(
+      rateFlashcardUsecase: dependencies.rateFlashcardUsecase,
     );
     super.didChangeDependencies();
   }
@@ -47,6 +52,7 @@ base class _BlocScopeState extends State<BlocScope> {
     return BlocScopeInherited(
       editBloc: _editBloc,
       overviewBloc: _overviewBloc,
+      repeatBloc: _repeatBloc,
       child: widget.child,
     );
   }
@@ -57,11 +63,13 @@ base class BlocScopeInherited extends InheritedWidget {
     required super.child,
     required this.editBloc,
     required this.overviewBloc,
+    required this.repeatBloc,
     super.key,
   });
 
   final FlashcardEditBloc editBloc;
   final FlashcardOverviewBloc overviewBloc;
+  final FlashcardRepeatBloc repeatBloc;
 
   @override
   bool updateShouldNotify(BlocScopeInherited oldWidget) =>
