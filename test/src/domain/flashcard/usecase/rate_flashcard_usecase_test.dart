@@ -1,6 +1,7 @@
 import 'package:comfy_memo/src/domain/algorithm/entity/algorithm_type.dart';
 import 'package:comfy_memo/src/domain/algorithm/entity/learning_rating.dart';
 import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
+import 'package:comfy_memo/src/domain/flashcard/repository/repository.dart';
 import 'package:comfy_memo/src/domain/flashcard/usecase/rate_flashcard_usecase.dart';
 import 'package:comfy_memo/src/domain/preferences/repository/repository.dart';
 import 'package:comfy_memo/src/domain/review_log/repository/repository.dart';
@@ -11,6 +12,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 @GenerateNiceMocks([
+  MockSpec<IFlashcardRepository>(as: #MockFlashcardRepository),
   MockSpec<ISchedulerEntryRepository>(as: #MockSchedulerEntryRepository),
   MockSpec<IReviewLogRepository>(as: #MockReviewLogRepository),
   MockSpec<IPreferencesRepository>(as: #MockPreferencesRepository),
@@ -18,6 +20,7 @@ import 'package:test/test.dart';
 import 'rate_flashcard_usecase_test.mocks.dart';
 
 void main() {
+  late MockFlashcardRepository mockFlashcardRepository;
   late MockSchedulerEntryRepository mockSchedulerEntryRepository;
   late MockReviewLogRepository mockReviewLogRepository;
   late MockPreferencesRepository mockPreferencesRepository;
@@ -28,11 +31,13 @@ void main() {
   late LearningRating dummyLearningRating;
 
   setUp(() {
+    mockFlashcardRepository = MockFlashcardRepository();
     mockSchedulerEntryRepository = MockSchedulerEntryRepository();
     mockReviewLogRepository = MockReviewLogRepository();
     mockPreferencesRepository = MockPreferencesRepository();
     fsrsAlgorithmUsecase = FsrsAlgorithmUsecase();
     usecase = RateFlashcardUsecase(
+      flashcardRepository: mockFlashcardRepository,
       schedulerEntryRepository: mockSchedulerEntryRepository,
       reviewLogRepository: mockReviewLogRepository,
       preferencesRepository: mockPreferencesRepository,
@@ -87,11 +92,13 @@ void main() {
         mockSchedulerEntryRepository.fetchFsrs(0),
         mockSchedulerEntryRepository.updateFsrs(0, schedulerUpdateDto),
         mockReviewLogRepository.logFsrs(0, reviewDto),
+        mockFlashcardRepository.updateStream(),
       ]);
 
       verifyNoMoreInteractions(mockSchedulerEntryRepository);
       verifyNoMoreInteractions(mockReviewLogRepository);
       verifyNoMoreInteractions(mockPreferencesRepository);
+      verifyNoMoreInteractions(mockFlashcardRepository);
     },
   );
 }
