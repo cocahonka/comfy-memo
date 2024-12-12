@@ -12,7 +12,7 @@ final class FlashcardWithDueEntity extends FlashcardEntity {
 
   final DateTime due;
 
-  bool get isRepetitionTime => due.isBefore(DateTime.now());
+  bool get isRepetitionTime => due.isBefore(DateTime.now().toUtc());
 
   @override
   int get hashCode =>

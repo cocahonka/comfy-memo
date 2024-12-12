@@ -58,12 +58,19 @@ base class _RepeatScreenState extends State<RepeatScreen> {
         _isLoading.value = false;
       case FlashcardRepeatState$Loading():
         _isLoading.value = true;
-      case FlashcardRepeatState$Success():
+      case final FlashcardRepeatState$Success success:
         _isLoading.value = false;
-        const snackBar = SnackBar(
-          content: Text('Rating has been successfully accepted'),
+        final due = success.nextDue.difference(DateTime.now().toUtc());
+        final nextRepeat =
+            due.inDays > 0 ? '${due.inDays} days' : '${due.inMinutes} minutes';
+
+        final snackBar = SnackBar(
+          content: Text(
+            'Rating has been successfully accepted! '
+            'The next repeat in $nextRepeat',
+          ),
           behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 5),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).pop();
