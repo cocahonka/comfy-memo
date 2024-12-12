@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:comfy_memo/src/common/bloc_scope.dart';
 import 'package:comfy_memo/src/common/constants.dart';
 import 'package:comfy_memo/src/domain/flashcard/bloc/edit_bloc.dart';
 import 'package:comfy_memo/src/domain/flashcard/bloc/overview_bloc.dart';
+import 'package:comfy_memo/src/domain/flashcard/dto/flashcard_create_dto.dart';
+import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_with_due_entity.dart';
 import 'package:comfy_memo/src/presentation/add_card/add_card_screen.dart';
+import 'package:comfy_memo/src/presentation/main_list/generate_random_data.dart';
 import 'package:comfy_memo/src/presentation/main_list/repeat_card.dart';
 import 'package:comfy_memo/src/presentation/repeat/repeat_screen.dart';
 import 'package:flutter/material.dart';
@@ -76,9 +80,27 @@ base class MainListScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void _generateSampleData(FlashcardEditBloc editBloc) {
+    final random = Random();
+    for (var i = 0; i < 3; ++i) {
+      editBloc.sink.add(
+        FlashcardEditEvent$Create(
+          dto: FlashcardCreateDto(
+            title: kTitles[i],
+            term: kTerms[i],
+            definition: kDefinitions[i],
+            selfVerifyType: random.nextBool()
+                ? SelfVerifyType.none
+                : SelfVerifyType.written,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     final blocScope = BlocScope.of(context);
 
     return Scaffold(
@@ -86,10 +108,16 @@ base class MainListScreen extends StatelessWidget {
         title: const Text(Constants.appName),
         centerTitle: true,
         forceMaterialTransparency: true,
+        actions: [
+          IconButton(
+            onPressed: () => _generateSampleData(blocScope.editBloc),
+            icon: const Icon(Icons.generating_tokens),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        foregroundColor: colorScheme.onTertiaryContainer,
-        backgroundColor: colorScheme.tertiaryContainer,
+        foregroundColor: theme.colorScheme.onTertiaryContainer,
+        backgroundColor: theme.colorScheme.tertiaryContainer,
         child: const Icon(Icons.add_rounded),
         onPressed: () async => _onAdd(context),
       ),
@@ -109,6 +137,19 @@ base class MainListScreen extends StatelessWidget {
             }
 
             final flashcards = state.flashcards;
+            if (flashcards.isEmpty) {
+              return Center(
+                child: Text(
+                  'Uh oh ... nothing there!\n'
+                  'Add new cards using the button below',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  ),
+                ),
+              );
+            }
+
             return ListView.builder(
               itemCount: flashcards.length,
               itemBuilder: (_, index) {
