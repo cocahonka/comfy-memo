@@ -12,6 +12,7 @@ base class RepeatScreen extends StatefulWidget {
   const RepeatScreen({
     required this.title,
     required this.term,
+    required this.definition,
     required this.selfVerifyType,
     required this.onRate,
     super.key,
@@ -19,6 +20,7 @@ base class RepeatScreen extends StatefulWidget {
 
   final String title;
   final String term;
+  final String definition;
   final SelfVerifyType selfVerifyType;
   final RateCallback onRate;
 
@@ -127,7 +129,7 @@ base class _RepeatScreenState extends State<RepeatScreen> {
                   ),
                   back: TermCardRateSide(
                     aspectRatio: aspectRatio,
-                    term: widget.term,
+                    term: widget.definition,
                     onRatingChanged: _onRatingChanged,
                   ),
                 ),

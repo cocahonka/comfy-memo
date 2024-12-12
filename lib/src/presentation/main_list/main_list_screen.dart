@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:comfy_memo/src/common/bloc_scope.dart';
 import 'package:comfy_memo/src/common/constants.dart';
-import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
+import 'package:comfy_memo/src/domain/flashcard/bloc/edit_bloc.dart';
+import 'package:comfy_memo/src/domain/flashcard/bloc/overview_bloc.dart';
+import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_with_due_entity.dart';
 import 'package:comfy_memo/src/presentation/add_card/add_card_screen.dart';
 import 'package:comfy_memo/src/presentation/main_list/repeat_card.dart';
 import 'package:comfy_memo/src/presentation/repeat/repeat_screen.dart';
@@ -11,114 +14,80 @@ base class MainListScreen extends StatelessWidget {
   const MainListScreen({super.key});
 
   Future<void> _onAdd(BuildContext context) async {
+    final editBloc = BlocScope.of(context).editBloc;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) => Dialog.fullscreen(
         child: AddCardScreen.createMode(
-          onCreate: (_) {},
+          onCreate: (dto) => editBloc.sink.add(
+            FlashcardEditEvent$Create(dto: dto),
+          ),
         ),
       ),
     );
   }
 
-  Future<void> _onEdit(BuildContext context) async {
+  Future<void> _onEdit(
+    BuildContext context,
+    FlashcardWithDueEntity flashcard,
+  ) async {
+    final editBloc = BlocScope.of(context).editBloc;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) => Dialog.fullscreen(
         child: AddCardScreen.editMode(
-          onEdit: (_) {},
-          onDelete: () {},
-          titleInitialValue: 'Hello world',
-          termInitialValue: 'termInitialValue',
-          definitionInitialValue: 'definitionInitialValue',
-          selfVerifyTypeInitialValue: SelfVerifyType.written,
+          onEdit: (dto) => editBloc.sink.add(
+            FlashcardEditEvent$Edit(
+              cardId: flashcard.id,
+              dto: dto,
+            ),
+          ),
+          onDelete: () => editBloc.sink.add(
+            FlashcardEditEvent$Delete(cardId: flashcard.id),
+          ),
+          titleInitialValue: flashcard.title,
+          termInitialValue: flashcard.term,
+          definitionInitialValue: flashcard.definition,
+          selfVerifyTypeInitialValue: flashcard.selfVerifyType,
         ),
       ),
     );
   }
 
-  Future<void> _onOpen(BuildContext context) async {
+  Future<void> _onOpen(
+    BuildContext context,
+    FlashcardWithDueEntity flashcard,
+  ) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => RepeatScreen(
-          title: 'Lorem ipsum dolor sit amet consectetur. '
-              'Diam dui nunc amet pharetra magna vitae',
-          term: 'Lorem ipsum dolor sit amet consectetur. '
-                  'Ac sit sit tellus velit quam consequat '
-                  'eleifend dapibus ipsum. '
-                  'Integer pulvinar metus pretium diam a '
-                  'felis quis eu elementum. '
-                  'Mi cras suspendisse risus nec. '
-                  'Justo nulla facilisi vulputate neque nec fringilla. ' *
-              20,
-          selfVerifyType: SelfVerifyType.written,
-          onRate: (_) {},
+          title: flashcard.title,
+          term: flashcard.term,
+          definition: flashcard.definition,
+          selfVerifyType: flashcard.selfVerifyType,
+          onRate: (rating) {
+            // Todo implement this
+          },
         ),
       ),
     );
+  }
+
+  void _showError(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text('An error occured: $message'),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    final cards = [
-      RepeatCard(
-        title: 'Lorem ipsum dolor sit amet',
-        term: 'Lorem ipsum dolor sit amet consectetur. '
-            'Tortor etiam sit diam feugiat. '
-            'Egestas pellentesque lobortis risus nec in a pulvinar. '
-            'Ultrices etiam amet netus elit. ',
-        isRepeatTime: true,
-        onOpen: () async => _onOpen(context),
-        onEdit: () async => _onEdit(context),
-      ),
-      RepeatCard(
-        title: 'Lorem ipsum dolor sit amet consectetur. '
-            'Diam dui nunc amet pharetra magna vitae',
-        term: 'Lorem ipsum dolor sit amet consectetur. '
-            'Urna auctor quis facilisis cursus neque eu feugiat. '
-            'Vulputate nibh risus eu massa condimentum lorem tristique. '
-            'Amet sit dolor id velit. '
-            'Odio hac pharetra ultricies in. '
-            'Amet quam donec lacus maecenas id vitae diam vitae tincidunt.',
-        isRepeatTime: true,
-        onOpen: () async => _onOpen(context),
-        onEdit: () async => _onEdit(context),
-      ),
-      RepeatCard(
-        title: 'Lorem ipsum dolor sit amet consectetur',
-        term: 'Lorem ipsum dolor sit amet consectetur. '
-            'Faucibus euismod donec urna eget in dui amet ultricies neque.',
-        isRepeatTime: false,
-        onOpen: () async => _onOpen(context),
-        onEdit: () async => _onEdit(context),
-      ),
-      RepeatCard(
-        title: 'Lorem ipsum dolor sit amet consectetur.',
-        term: 'Lorem ipsum dolor sit amet consectetur. '
-            'Ac sit sit tellus velit quam consequat eleifend dapibus ipsum. '
-            'Integer pulvinar metus pretium diam a felis quis eu elementum. '
-            'Mi cras suspendisse risus nec. '
-            'Justo nulla facilisi vulputate neque nec fringilla. ',
-        isRepeatTime: false,
-        onOpen: () async => _onOpen(context),
-        onEdit: () async => _onEdit(context),
-      ),
-      RepeatCard(
-        title: 'Lorem ipsum dolor sit amet consectetur.',
-        term: 'Lorem ipsum dolor sit amet consectetur. '
-            'Ac sit sit tellus velit quam consequat eleifend dapibus ipsum. '
-            'Integer pulvinar metus pretium diam a felis quis eu elementum. '
-            'Mi cras suspendisse risus nec. '
-            'Justo nulla facilisi vulputate neque nec fringilla. ',
-        isRepeatTime: false,
-        onOpen: () async => _onOpen(context),
-        onEdit: () async => _onEdit(context),
-      ),
-    ];
+    final blocScope = BlocScope.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -134,13 +103,39 @@ base class MainListScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView.builder(
-          itemCount: cards.length,
-          itemBuilder: (_, index) => Padding(
-            padding:
-                EdgeInsets.only(bottom: index == cards.length - 1 ? 16 : 12),
-            child: cards[index],
-          ),
+        child: StreamBuilder(
+          stream: blocScope.overviewBloc.stream,
+          builder: (context, snapshot) {
+            final state = snapshot.data;
+
+            if (state == null || state is FlashcardOverviewState$Loading) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+
+            if (state is FlashcardOverviewState$Error) {
+              _showError(context, state.message);
+            }
+
+            final flashcards = state.flashcards;
+            return ListView.builder(
+              itemCount: flashcards.length,
+              itemBuilder: (_, index) {
+                final card = flashcards[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index == flashcards.length - 1 ? 16 : 12,
+                  ),
+                  child: RepeatCard(
+                    title: card.title,
+                    term: card.term,
+                    isRepeatTime: card.isRepetitionTime,
+                    onOpen: () async => _onOpen(context, card),
+                    onEdit: () async => _onEdit(context, card),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
