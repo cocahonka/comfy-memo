@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:comfy_memo/src/domain/algorithm/entity/algorithm_type.dart';
 import 'package:comfy_memo/src/domain/algorithm/usecase/fsrs_algorithm_usecase.dart';
 import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_entity.dart';
+import 'package:comfy_memo/src/domain/flashcard/entity/flashcard_with_due_entity.dart';
 import 'package:comfy_memo/src/domain/flashcard/maping/maping.dart';
 import 'package:comfy_memo/src/domain/flashcard/repository/repository.dart';
 import 'package:comfy_memo/src/domain/flashcard/usecase/get_flashcards_usecase.dart';
@@ -79,8 +82,10 @@ void main() {
       ),
     ];
 
+    final controller = StreamController<List<FlashcardEntity>>();
+    controller.add(flashcards);
     when(mockFlashcardRepository.flashcards).thenAnswer(
-      (_) => Stream.fromIterable([flashcards]),
+      (_) => controller.stream,
     );
 
     final stream = usecase();
@@ -91,6 +96,8 @@ void main() {
         flashcards.map((flashcard) => flashcard.withDue(dummyDue)).toList(),
       ]),
     );
+
+    await controller.close();
 
     verifyInOrder([
       mockFlashcardRepository.flashcards,

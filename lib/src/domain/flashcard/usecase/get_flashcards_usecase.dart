@@ -23,13 +23,16 @@ final class GetFlashcardsUsecase {
   final IPreferencesRepository _preferencesRepository;
 
   Stream<List<FlashcardWithDueEntity>> call() async* {
-    await for (final flashcards in _flashcardRepository.flashcards) {
-      final transformedFlashcards = await Future.wait(
-        flashcards.map(_transform),
-      );
-
-      yield transformedFlashcards;
-    }
+    yield* _flashcardRepository.flashcards.transform(
+      StreamTransformer.fromHandlers(
+        handleData: (data, sink) async {
+          final transformedFlashcards = await Future.wait(
+            data.map(_transform),
+          );
+          sink.add(transformedFlashcards);
+        },
+      ),
+    );
   }
 
   Future<FlashcardWithDueEntity> _transform(FlashcardEntity flashcard) async {
