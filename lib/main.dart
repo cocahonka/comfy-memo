@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:comfy_memo/src/common/bloc_scope.dart';
 import 'package:comfy_memo/src/common/composition_root.dart';
 import 'package:comfy_memo/src/common/constants.dart';
 import 'package:comfy_memo/src/common/dependencies_scope.dart';
@@ -12,11 +13,12 @@ import 'package:flutter/material.dart';
 
 Future<void> main() async {
   final dependencies = await CompositionRoot().compose();
+
   runZonedGuarded(
     () => runApp(
       DependenciesScope(
         dependencies: dependencies,
-        child: const App(),
+        child: const BlocScope(child: App()),
       ),
     ),
     (error, stack) {
