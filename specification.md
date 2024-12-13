@@ -172,7 +172,7 @@
 ```
 Flashcard (1) ─── (M) ReviewLog (1) ─── (1) FSRSReviewLog
       |
-      ╰─── (1) SchedulerEntry (1) ─── (1) FSRSSchedulerEntry
+      ╰─── (M) SchedulerEntry (1) ─── (1) FSRSSchedulerEntry
 ```
 
 ## 6. Технические Требования
