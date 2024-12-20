@@ -1,14 +1,23 @@
 name: comfy_memo
 description: "An app that improves memorization through interval repetition"
-publish_to: 'none'
+publish_to: "none"
 version: 0.0.1
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.6.0
 
 dependencies:
   flutter:
     sdk: flutter
+
+  meta: any
+
+  freezed_annotation: ^2.4.4
+
+dev_dependencies:
+  freezed: ^2.5.7
+
+  build_runner: ^2.4.14
 
 flutter:
   uses-material-design: true

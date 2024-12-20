@@ -20,7 +20,7 @@
 .classpath
 .project
 .settings/
-.vscode/*
+.vscode
 cspell.json
 cspell.config.json
 
@@ -117,3 +117,7 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
+
+# Generated
+*.mocks.dart
+*.freezed.dart
