@@ -6,7 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'fsrs_review_log.freezed.dart';
 
 @freezed
-base class FsrsReviewLog with _$FsrsReviewLog {
+class FsrsReviewLog with _$FsrsReviewLog {
   const factory FsrsReviewLog({
     required int id,
     required int reviewLogId,

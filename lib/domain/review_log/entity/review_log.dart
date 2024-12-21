@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'review_log.freezed.dart';
 
 @freezed
-base class ReviewLog with _$ReviewLog {
+class ReviewLog with _$ReviewLog {
   const factory ReviewLog({
     required int id,
     required int cardId,

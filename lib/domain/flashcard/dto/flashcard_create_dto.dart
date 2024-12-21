@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'flashcard_create_dto.freezed.dart';
 
 @freezed
-base class FlashcardCreateDto with _$FlashcardCreateDto {
+class FlashcardCreateDto with _$FlashcardCreateDto {
   const factory FlashcardCreateDto({
     required String title,
     required String term,

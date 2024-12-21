@@ -19,4 +19,9 @@ base class ReviewLogRepositoryImpl implements IReviewLogRepository {
       ),
     );
   }
+
+  @override
+  Future<void> delete(int cardId) async {
+    _logs.remove(cardId);
+  }
 }

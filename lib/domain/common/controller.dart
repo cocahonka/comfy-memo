@@ -4,9 +4,10 @@ abstract base class Controller<State> extends ValueNotifier<State> {
   Controller(State state) : super(state);
 
   @protected
+  // For a functional approach
+  // ignore: use_setters_to_change_properties
   void setState(State state) {
     value = state;
-    notifyListeners();
   }
 
   @protected

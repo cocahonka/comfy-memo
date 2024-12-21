@@ -10,7 +10,7 @@ base class FlashcardRepositoryImpl implements IFlashcardRepository {
   int get _nextId => _elementsForAllTime++;
 
   @override
-  Future<void> create(FlashcardCreateDto dto) async {
+  Future<Flashcard> create(FlashcardCreateDto dto) async {
     final id = _nextId;
     _flashcards[id] = Flashcard(
       id: id,
@@ -19,6 +19,7 @@ base class FlashcardRepositoryImpl implements IFlashcardRepository {
       definition: dto.definition,
       selfVerify: dto.selfVerify,
     );
+    return _flashcards[id]!;
   }
 
   @override

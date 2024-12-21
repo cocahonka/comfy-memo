@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'fsrs_scheduler_entry.freezed.dart';
 
 @freezed
-base class FsrsSchedulerEntry with _$FsrsSchedulerEntry {
+class FsrsSchedulerEntry with _$FsrsSchedulerEntry {
   const factory FsrsSchedulerEntry({
     required int id,
     required int schedulerId,

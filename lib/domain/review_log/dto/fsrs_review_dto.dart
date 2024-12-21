@@ -6,7 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'fsrs_review_dto.freezed.dart';
 
 @freezed
-base class FsrsReviewDto with _$FsrsReviewDto {
+class FsrsReviewDto with _$FsrsReviewDto {
   const factory FsrsReviewDto({
     required DateTime review,
     required RepeatRating rating,

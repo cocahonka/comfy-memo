@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'flashcard_with_due.freezed.dart';
 
 @freezed
-base class FlashcardWithDue with _$FlashcardWithDue {
+class FlashcardWithDue with _$FlashcardWithDue {
   const factory FlashcardWithDue({
     required int id,
     required String title,
@@ -16,6 +16,8 @@ base class FlashcardWithDue with _$FlashcardWithDue {
   }) = _FlashcardWithDue;
 
   const FlashcardWithDue._();
+
+  bool get isRepetitionTime => due.isBefore(DateTime.now().toUtc());
 
   Flashcard toEntity() => Flashcard(
         id: id,

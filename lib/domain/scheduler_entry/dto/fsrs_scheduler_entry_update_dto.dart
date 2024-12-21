@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'fsrs_scheduler_entry_update_dto.freezed.dart';
 
 @freezed
-base class FsrsSchedulerEntryUpdateDto with _$FsrsSchedulerEntryUpdateDto {
+class FsrsSchedulerEntryUpdateDto with _$FsrsSchedulerEntryUpdateDto {
   const factory FsrsSchedulerEntryUpdateDto({
     required DateTime due,
     required int scheduledDays,

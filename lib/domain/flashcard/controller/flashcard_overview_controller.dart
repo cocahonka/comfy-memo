@@ -12,20 +12,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'flashcard_overview_controller.freezed.dart';
 
 @freezed
-sealed class FlashcardOverviewState with _$FlashcardOverviewState {
-  const factory FlashcardOverviewState.loading([
+sealed class OverviewState with _$OverviewState {
+  const factory OverviewState.loading([
     @Default([]) List<FlashcardWithDue> flashcards,
-  ]) = Loading;
-  const factory FlashcardOverviewState.idle(List<FlashcardWithDue> flashcards) =
-      Idle;
-  const factory FlashcardOverviewState.error(
+  ]) = OverviewState$Loading;
+  const factory OverviewState.idle(List<FlashcardWithDue> flashcards) =
+      OverviewState$Idle;
+  const factory OverviewState.error(
     List<FlashcardWithDue> flashcards,
     String message,
-  ) = Error;
+  ) = OverviewState$Error;
 }
 
-base class FlashcardOverviewController
-    extends Controller<FlashcardOverviewState> {
+base class FlashcardOverviewController extends Controller<OverviewState> {
   FlashcardOverviewController({
     required IFlashcardRepository flashcardRepository,
     required ISchedulerEntryRepository schedulerEntryRepository,
@@ -33,7 +32,7 @@ base class FlashcardOverviewController
   })  : _flashcardRepository = flashcardRepository,
         _schedulerEntryRepository = schedulerEntryRepository,
         _preferencesRepository = preferencesRepository,
-        super(const FlashcardOverviewState.loading());
+        super(const OverviewState.loading());
 
   final IFlashcardRepository _flashcardRepository;
   final ISchedulerEntryRepository _schedulerEntryRepository;
@@ -42,16 +41,28 @@ base class FlashcardOverviewController
 
   Future<void> fetchAll() async => handle(() async {
         final flashcards = await _flashcardRepository.fetch();
-        final transformed = await Future.wait(flashcards.map(_transform));
-        setState(FlashcardOverviewState.idle(transformed));
+        final transformed = await Future.wait(flashcards.map(_transform))
+          ..sort(_compareForSort);
+        setState(OverviewState.idle(transformed));
       });
 
   Future<void> fetchSchedulerOnly() async => handle(() async {
         final transformed = await Future.wait(
           value.flashcards.map((card) => card.toEntity()).map(_transform),
-        );
-        setState(FlashcardOverviewState.idle(transformed));
+        )
+          ..sort(_compareForSort);
+        setState(OverviewState.idle(transformed));
       });
+
+  int _compareForSort(FlashcardWithDue first, FlashcardWithDue second) {
+    if (first.isRepetitionTime && second.isRepetitionTime) {
+      return first.id.compareTo(second.id);
+    } else if (first.isRepetitionTime) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
 
   Future<FlashcardWithDue> _transform(Flashcard flashcard) async {
     final algorithmType = await _preferencesRepository.fetch(flashcard.id);
@@ -106,7 +117,7 @@ base class FlashcardOverviewController
       _scheduleDueNotifications(value.flashcards);
     } on Object {
       setState(
-        FlashcardOverviewState.error(
+        OverviewState.error(
           value.flashcards,
           'An unknown error occurred',
         ),

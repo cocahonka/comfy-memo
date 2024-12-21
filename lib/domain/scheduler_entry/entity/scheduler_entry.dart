@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'scheduler_entry.freezed.dart';
 
 @freezed
-base class SchedulerEntry with _$SchedulerEntry {
+class SchedulerEntry with _$SchedulerEntry {
   const factory SchedulerEntry({
     required int id,
     required int cardId,

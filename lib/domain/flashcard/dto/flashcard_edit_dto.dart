@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'flashcard_edit_dto.freezed.dart';
 
 @freezed
-base class FlashcardEditDto with _$FlashcardEditDto {
+class FlashcardEditDto with _$FlashcardEditDto {
   const factory FlashcardEditDto({
     required String? title,
     required String? term,

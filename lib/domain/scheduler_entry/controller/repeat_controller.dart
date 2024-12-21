@@ -12,10 +12,33 @@ part 'repeat_controller.freezed.dart';
 
 @freezed
 sealed class RepeatState with _$RepeatState {
-  const factory RepeatState.loading() = Loading;
-  const factory RepeatState.idle() = Idle;
-  const factory RepeatState.success(DateTime nextDue) = Success;
-  const factory RepeatState.error(String message) = Error;
+  const factory RepeatState.initial({
+    required RepeatRating? rating,
+    required bool hasEverAnswered,
+    required bool hasEverRated,
+  }) = RepeatState$Initial;
+  const factory RepeatState.answered({
+    required RepeatRating? rating,
+    required bool hasEverAnswered,
+    required bool hasEverRated,
+  }) = RepeatState$Answered;
+  const factory RepeatState.loading({
+    required RepeatRating? rating,
+    required bool hasEverAnswered,
+    required bool hasEverRated,
+  }) = RepeatState$Loading;
+  const factory RepeatState.error(
+    String message, {
+    required RepeatRating? rating,
+    required bool hasEverAnswered,
+    required bool hasEverRated,
+  }) = RepeatState$Error;
+  const factory RepeatState.success(
+    DateTime due, {
+    required RepeatRating? rating,
+    required bool hasEverAnswered,
+    required bool hasEverRated,
+  }) = RepeatState$Success;
 }
 
 base class RepeatController extends Controller<RepeatState> {
@@ -28,52 +51,119 @@ base class RepeatController extends Controller<RepeatState> {
         _reviewLogRepository = reviewLogRepository,
         _preferencesRepository = preferencesRepository,
         _fsrsAlgorithm = fsrsAlgorithm,
-        super(const RepeatState.idle());
+        super(
+          const RepeatState.initial(
+            rating: null,
+            hasEverAnswered: false,
+            hasEverRated: false,
+          ),
+        );
 
   final ISchedulerEntryRepository _schedulerEntryRepository;
   final IReviewLogRepository _reviewLogRepository;
   final IPreferencesRepository _preferencesRepository;
   final FsrsAlgorithm _fsrsAlgorithm;
 
-  Future<void> rate({
-    required RepeatRating rating,
-    required int cardId,
-    DateTime? repeatTime,
-  }) async =>
-      handle(() async {
-        final algorithmType = await _preferencesRepository.fetch(cardId);
-        return switch (algorithmType) {
-          AlgorithmType.fsrs => _rateFsrs(cardId, rating, repeatTime)
-        };
-      });
+  void answer() {
+    if (value is RepeatState$Answered) {
+      setState(
+        RepeatState.initial(
+          rating: value.rating,
+          hasEverAnswered: true,
+          hasEverRated: value.hasEverRated,
+        ),
+      );
+    } else {
+      setState(
+        RepeatState.answered(
+          rating: value.rating,
+          hasEverAnswered: true,
+          hasEverRated: value.hasEverRated,
+        ),
+      );
+    }
+  }
 
-  Future<void> _rateFsrs(
-    int cardId,
-    RepeatRating rating,
-    DateTime? repeatTime,
-  ) async {
+  void rate(RepeatRating? rating, {void Function()? onFirstRate}) {
+    if (!value.hasEverRated && rating != null) onFirstRate?.call();
+
+    setState(
+      value.copyWith(
+        rating: rating,
+        hasEverAnswered: true,
+        hasEverRated: value.hasEverRated || rating != null,
+      ),
+    );
+  }
+
+  Future<void> submitRating({
+    required int cardId,
+    DateTime? submitTime,
+  }) async {
+    final RepeatRating rating;
+    if (value.rating case final nonNullableRating?) {
+      rating = nonNullableRating;
+    } else {
+      return;
+    }
+
+    return handle(() async {
+      final algorithmType = await _preferencesRepository.fetch(cardId);
+      await switch (algorithmType) {
+        AlgorithmType.fsrs => _submitFsrs(
+            cardId: cardId,
+            rating: rating,
+            submitTime: submitTime,
+          ),
+      };
+    });
+  }
+
+  Future<void> _submitFsrs({
+    required int cardId,
+    required RepeatRating rating,
+    DateTime? submitTime,
+  }) async {
     final scheduler = await _schedulerEntryRepository.fetchFsrs(cardId);
     final (:schedulerUpdateDto, :reviewDto) = _fsrsAlgorithm.process(
       rating: rating,
       scheduler: scheduler,
-      repeatTime: repeatTime,
+      repeatTime: submitTime,
     );
     await _schedulerEntryRepository.updateFsrs(
       schedulerUpdateDto,
       cardId,
     );
     await _reviewLogRepository.logFsrs(reviewDto, cardId);
-    setState(RepeatState.success(schedulerUpdateDto.due));
+    setState(
+      RepeatState.success(
+        schedulerUpdateDto.due,
+        rating: rating,
+        hasEverRated: true,
+        hasEverAnswered: true,
+      ),
+    );
   }
 
   @override
   Future<void> handle(Future<void> Function() action) async {
-    setState(const RepeatState.loading());
+    setState(
+      RepeatState.loading(
+        rating: value.rating,
+        hasEverAnswered: value.hasEverAnswered,
+        hasEverRated: value.hasEverRated,
+      ),
+    );
     try {
       await action();
     } on Object {
       setState(
-        const RepeatState.error('An unknown error occurred'),
+        RepeatState.error(
+          'An unknown error occurred',
+          rating: value.rating,
+          hasEverAnswered: value.hasEverAnswered,
+          hasEverRated: value.hasEverRated,
+        ),
       );
     }
   }

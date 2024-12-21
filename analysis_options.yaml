@@ -4,7 +4,7 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
   exclude:
-    - "**.freezed.dart"
+    # - "**.freezed.dart"
 
   errors:
     todo: ignore

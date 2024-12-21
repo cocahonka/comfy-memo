@@ -7,7 +7,7 @@ part 'flashcard.freezed.dart';
 enum SelfVerify { none, written }
 
 @freezed
-base class Flashcard with _$Flashcard {
+class Flashcard with _$Flashcard {
   const factory Flashcard({
     required int id,
     required String title,
