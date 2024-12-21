@@ -52,6 +52,7 @@ final class App extends StatelessWidget {
     );
     unawaited(overviewController.fetchAll());
 
+
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final ThemeData lightTheme;
@@ -79,6 +80,7 @@ final class App extends StatelessWidget {
             title: 'Comfy memo',
             home: const OverviewScreen(),
           ),
+
         );
       },
     );

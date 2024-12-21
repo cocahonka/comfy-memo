@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   meta: any
-
+  
   freezed_annotation: ^2.4.4
 
   dynamic_color: ^1.7.0
@@ -20,6 +20,7 @@ dev_dependencies:
   freezed: ^2.5.7
 
   build_runner: ^2.4.14
+
 
 flutter:
   uses-material-design: true
