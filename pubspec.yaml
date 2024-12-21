@@ -4,20 +4,23 @@ publish_to: "none"
 version: 0.0.1
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.6.0
 
 dependencies:
   flutter:
     sdk: flutter
 
   meta: any
-  mockito: ^5.4.4
+  
+  freezed_annotation: ^2.4.4
 
   dynamic_color: ^1.7.0
 
 dev_dependencies:
-  test: ^1.25.7
-  build_runner: ^2.4.13
+  freezed: ^2.5.7
+
+  build_runner: ^2.4.14
+
 
 flutter:
   uses-material-design: true

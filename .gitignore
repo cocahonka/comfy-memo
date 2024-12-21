@@ -20,7 +20,7 @@
 .classpath
 .project
 .settings/
-.vscode/*
+.vscode
 cspell.json
 cspell.config.json
 
@@ -120,3 +120,4 @@ app.*.symbols
 
 # Generated
 *.mocks.dart
+*.freezed.dart
