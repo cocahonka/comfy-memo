@@ -158,11 +158,11 @@ class _RepeatScreenState extends State<RepeatScreen> {
                 duration: const Duration(milliseconds: 800),
                 curve: Curves.easeInOut,
                 onFlipped: (state) => _repeatController.answer(),
-                front: TermCardTermSide(
+                front: RepeatCard$Term(
                   aspectRatio: aspectRatio,
                   term: widget.flashcard.term,
                 ),
-                back: TermCardRateSide(
+                back: RepeatCard$Rate(
                   aspectRatio: aspectRatio,
                   term: widget.flashcard.definition,
                   // TODO: Select states

@@ -2,8 +2,8 @@ import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
 import 'package:comfy_memo/view/repeat/repeat_rating_selector.dart';
 import 'package:flutter/material.dart';
 
-class TermCard extends StatelessWidget {
-  const TermCard({
+class RepeatCard extends StatelessWidget {
+  const RepeatCard({
     required this.aspectRatio,
     required this.child,
     super.key,
@@ -30,8 +30,8 @@ class TermCard extends StatelessWidget {
   }
 }
 
-class TermCardTermSide extends StatelessWidget {
-  const TermCardTermSide({
+class RepeatCard$Term extends StatelessWidget {
+  const RepeatCard$Term({
     required this.aspectRatio,
     required this.term,
     super.key,
@@ -44,11 +44,12 @@ class TermCardTermSide extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TermCard(
+    return RepeatCard(
       aspectRatio: aspectRatio,
       child: SingleChildScrollView(
         child: Text(
           term,
+          textAlign: TextAlign.justify,
           style: theme.textTheme.bodyLarge
               ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
@@ -57,8 +58,8 @@ class TermCardTermSide extends StatelessWidget {
   }
 }
 
-class TermCardRateSide extends StatelessWidget {
-  const TermCardRateSide({
+class RepeatCard$Rate extends StatelessWidget {
+  const RepeatCard$Rate({
     required this.aspectRatio,
     required this.term,
     required this.onRatingChanged,
@@ -73,7 +74,7 @@ class TermCardRateSide extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TermCard(
+    return RepeatCard(
       aspectRatio: aspectRatio,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
