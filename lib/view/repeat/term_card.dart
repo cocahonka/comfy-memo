@@ -1,5 +1,5 @@
 import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
-import 'package:comfy_memo/view/repeat/learning_rating_selector.dart';
+import 'package:comfy_memo/view/repeat/repeat_rating_selector.dart';
 import 'package:flutter/material.dart';
 
 class TermCard extends StatelessWidget {
@@ -107,7 +107,7 @@ class TermCardRateSide extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child:
-                    LearningRatingSelector(onSelectionChanged: onRatingChanged),
+                    RepeatRatingSelector(onSelectionChanged: onRatingChanged),
               ),
             ],
           ),
