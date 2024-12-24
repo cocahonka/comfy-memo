@@ -364,12 +364,16 @@ final class MaterialTheme {
         useMaterial3: true,
         brightness: colorScheme.brightness,
         colorScheme: colorScheme,
+        scaffoldBackgroundColor: colorScheme.surface,
+        canvasColor: colorScheme.surface,
         textTheme: textTheme.apply(
           bodyColor: colorScheme.onSurface,
           displayColor: colorScheme.onSurface,
         ),
-        scaffoldBackgroundColor: colorScheme.surface,
-        canvasColor: colorScheme.surface,
+        snackBarTheme: const SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+          dismissDirection: DismissDirection.horizontal,
+        ),
       );
 
   List<ExtendedColor> get extendedColors => [];
