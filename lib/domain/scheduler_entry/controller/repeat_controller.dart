@@ -70,33 +70,33 @@ base class RepeatController extends Controller<RepeatState> {
   final FsrsAlgorithm _fsrsAlgorithm;
 
   void answer() {
-    if (value is RepeatState$Answered) {
+    if (state is RepeatState$Answered) {
       setState(
         RepeatState.initial(
-          rating: value.rating,
+          rating: state.rating,
           hasEverAnswered: true,
-          hasEverRated: value.hasEverRated,
+          hasEverRated: state.hasEverRated,
         ),
       );
     } else {
       setState(
         RepeatState.answered(
-          rating: value.rating,
+          rating: state.rating,
           hasEverAnswered: true,
-          hasEverRated: value.hasEverRated,
+          hasEverRated: state.hasEverRated,
         ),
       );
     }
   }
 
   void rate(RepeatRating? rating, {void Function()? onFirstRate}) {
-    if (value.isNeverRated && rating != null) onFirstRate?.call();
+    if (state.isNeverRated && rating != null) onFirstRate?.call();
 
     setState(
-      value.copyWith(
+      state.copyWith(
         rating: rating,
         hasEverAnswered: true,
-        hasEverRated: value.hasEverRated || rating != null,
+        hasEverRated: state.hasEverRated || rating != null,
       ),
     );
   }
@@ -106,7 +106,7 @@ base class RepeatController extends Controller<RepeatState> {
     DateTime? submitTime,
   }) async {
     final RepeatRating rating;
-    if (value.rating case final nonNullableRating?) {
+    if (state.rating case final nonNullableRating?) {
       rating = nonNullableRating;
     } else {
       return;
@@ -154,9 +154,9 @@ base class RepeatController extends Controller<RepeatState> {
   Future<void> handle(Future<void> Function() action) async {
     setState(
       RepeatState.loading(
-        rating: value.rating,
-        hasEverAnswered: value.hasEverAnswered,
-        hasEverRated: value.hasEverRated,
+        rating: state.rating,
+        hasEverAnswered: state.hasEverAnswered,
+        hasEverRated: state.hasEverRated,
       ),
     );
     try {
@@ -165,9 +165,9 @@ base class RepeatController extends Controller<RepeatState> {
       setState(
         RepeatState.error(
           'An unknown error occurred',
-          rating: value.rating,
-          hasEverAnswered: value.hasEverAnswered,
-          hasEverRated: value.hasEverRated,
+          rating: state.rating,
+          hasEverAnswered: state.hasEverAnswered,
+          hasEverRated: state.hasEverRated,
         ),
       );
     }

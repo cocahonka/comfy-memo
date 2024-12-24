@@ -48,7 +48,7 @@ base class FlashcardOverviewController extends Controller<OverviewState> {
 
   Future<void> fetchSchedulerOnly() async => handle(() async {
         final transformed = await Future.wait(
-          value.flashcards.map((card) => card.toEntity()).map(_transform),
+          state.flashcards.map((card) => card.toEntity()).map(_transform),
         )
           ..sort(_compareForSort);
         setState(OverviewState.idle(transformed));
@@ -114,11 +114,11 @@ base class FlashcardOverviewController extends Controller<OverviewState> {
   Future<void> handle(Future<void> Function() action) async {
     try {
       await action();
-      _scheduleDueNotifications(value.flashcards);
+      _scheduleDueNotifications(state.flashcards);
     } on Object {
       setState(
         OverviewState.error(
-          value.flashcards,
+          state.flashcards,
           'An unknown error occurred',
         ),
       );
