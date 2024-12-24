@@ -157,7 +157,7 @@ class _RepeatScreenState extends State<RepeatScreen> {
               FlipCard(
                 duration: const Duration(milliseconds: 800),
                 curve: Curves.easeInOut,
-                onTapCallback: _repeatController.answer,
+                onFlipped: (state) => _repeatController.answer(),
                 front: TermCardTermSide(
                   aspectRatio: aspectRatio,
                   term: widget.flashcard.term,
