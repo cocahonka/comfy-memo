@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:comfy_memo/domain/flashcard/entity/flashcard.dart';
-import 'package:comfy_memo/domain/flashcard/entity/flashcard_with_due.dart';
 import 'package:comfy_memo/domain/scheduler_entry/controller/repeat_controller.dart';
 import 'package:comfy_memo/view/common/custom_text_field.dart';
 import 'package:comfy_memo/view/common/flip_card.dart';
@@ -10,12 +9,9 @@ import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:flutter/material.dart';
 
 class RepeatScreen extends StatefulWidget {
-  const RepeatScreen({
-    required this.flashcard,
-    super.key,
-  });
+  const RepeatScreen({required this.flashcard, super.key});
 
-  final FlashcardWithDue flashcard;
+  final Flashcard flashcard;
 
   @override
   State<RepeatScreen> createState() => _RepeatScreenState();
@@ -23,7 +19,13 @@ class RepeatScreen extends StatefulWidget {
 
 class _RepeatScreenState extends State<RepeatScreen> {
   late RepeatController _repeatController;
-  final TextEditingController _textController = TextEditingController();
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    _textController = TextEditingController();
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -37,117 +39,54 @@ class _RepeatScreenState extends State<RepeatScreen> {
   void dispose() {
     _textController.dispose();
     _repeatController.removeListener(_onRepeatState);
-
     super.dispose();
   }
 
   void _onRepeatState() {
     final state = _repeatController.value;
-    switch (state) {
-      case RepeatState$Initial():
-        break;
-      case RepeatState$Answered():
-        break;
-      case RepeatState$Loading():
-        break;
-      case final RepeatState$Error error:
-        final snackBar = SnackBar(
-          content: Text('An error occured: ${error.message}'),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 2),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      case final RepeatState$Success success:
-        final due = success.due.difference(DateTime.now().toUtc());
-        final String nextRepeat;
-        if (due.inDays > 0) {
-          nextRepeat = '${due.inDays} days';
-        } else if (due.inHours > 0) {
-          nextRepeat = '${due.inHours} hours';
-        } else if (due.inMinutes > 0) {
-          nextRepeat = '${due.inMinutes} minutes';
-        } else {
-          nextRepeat = '${due.inSeconds} seconds';
-        }
-
-        final snackBar = SnackBar(
-          content: Text(
-            'Rating has been successfully accepted! '
-            'The next repeat in $nextRepeat',
-          ),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 5),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.of(context).pop();
+    if (state case final RepeatState$Error error) {
+      _showErrorSnackbar(error.message);
+    } else if (state case final RepeatState$Success success) {
+      _showNextRepeatSnackbar(
+        success.due.difference(DateTime.now().toUtc()),
+      );
+      Navigator.of(context).pop();
     }
   }
 
-  Future<void> _onClose(BuildContext context) async {
-    if (!context.mounted) return;
+  Future<void> _onClose() async {
+    if (!mounted) return;
 
-    if (!_repeatController.value.hasEverAnswered) {
+    final state = _repeatController.value;
+    if (state.isNeverAnswered) {
       Navigator.pop(context);
       return;
     }
-
-    if (_repeatController.value.rating != null) {
+    if (state.rating != null) {
       unawaited(_repeatController.submitRating(cardId: widget.flashcard.id));
       return;
     }
 
-    final isCanceled = await showDialog<bool>(
+    final isExitCanceled = await showDialog<bool>(
           context: context,
           barrierDismissible: false,
-          builder: (_) => const ExitWithoutRateDialog(),
+          builder: (_) => const RepeatDialog$ExitWithoutRate(),
         ) ??
         true;
 
-    if (!isCanceled && context.mounted) Navigator.of(context).pop();
-  }
-
-  Future<void> _onFirstRate(BuildContext context) async {
-    if (!context.mounted) return;
-
-    final snackBar = SnackBar(
-      content: const Text(
-        'Now you can exit the card, '
-        'your rate will be taken! :)',
-      ),
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 5),
-      action: SnackBarAction(
-        label: 'Exit',
-        onPressed: () async => _onClose(context),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    if (mounted && !isExitCanceled) Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final aspectRatio =
+    final repeatCardAspectRatio =
         widget.flashcard.selfVerify == SelfVerify.written ? 0.92 : 0.62;
 
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        bottom: RepeatScreenAppBarBottomTitle(title: widget.flashcard.title),
-        leading: RepaintBoundary(
-          child: ValueListenableBuilder(
-            valueListenable: _repeatController,
-            builder: (_, value, __) {
-              // TODO: Select states
-              final isLoading = value is RepeatState$Loading;
-              return IconButton(
-                onPressed: isLoading ? null : () async => _onClose(context),
-                icon: isLoading
-                    ? const CircularProgressIndicator.adaptive()
-                    : const Icon(Icons.arrow_back_rounded),
-              );
-            },
-          ),
-        ),
+        bottom: RepeatScreen$AppBar$Bottom(title: widget.flashcard.title),
+        leading: RepeatScreen$AppBar$Leading(onPressed: _onClose),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -159,16 +98,15 @@ class _RepeatScreenState extends State<RepeatScreen> {
                 curve: Curves.easeInOut,
                 onFlipped: (state) => _repeatController.answer(),
                 front: RepeatCard$Term(
-                  aspectRatio: aspectRatio,
+                  aspectRatio: repeatCardAspectRatio,
                   term: widget.flashcard.term,
                 ),
                 back: RepeatCard$Rate(
-                  aspectRatio: aspectRatio,
+                  aspectRatio: repeatCardAspectRatio,
                   term: widget.flashcard.definition,
-                  // TODO: Select states
                   onRatingChanged: (rating) => _repeatController.rate(
                     rating,
-                    onFirstRate: () => unawaited(_onFirstRate(context)),
+                    onFirstRate: _showFirstRateSnackbar,
                   ),
                 ),
               ),
@@ -193,11 +131,79 @@ class _RepeatScreenState extends State<RepeatScreen> {
       ),
     );
   }
+
+  void _showErrorSnackbar(String error) {
+    final snackbar = SnackBar(
+      content: Text('An error occured: $error'),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackbar);
+  }
+
+  void _showNextRepeatSnackbar(Duration nextRepeat) {
+    String formatDuration(Duration duration) {
+      if (duration.inDays > 0) return '${duration.inDays} days';
+      if (duration.inHours > 0) return '${duration.inHours} hours';
+      if (duration.inMinutes > 0) return '${duration.inMinutes} minutes';
+      return '${duration.inSeconds} seconds';
+    }
+
+    final snackBar = SnackBar(
+      content: Text(
+        'Rating has been successfully accepted! '
+        'The next repeat in ${formatDuration(nextRepeat)}',
+      ),
+      duration: const Duration(seconds: 5),
+    );
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  void _showFirstRateSnackbar() {
+    final snackBar = SnackBar(
+      content: const Text(
+        'Now you can exit the card, '
+        'your rate will be taken! :)',
+      ),
+      duration: const Duration(seconds: 5),
+      action: SnackBarAction(label: 'Exit', onPressed: _onClose),
+    );
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
 }
 
-class RepeatScreenAppBarBottomTitle extends StatelessWidget
+class RepeatScreen$AppBar$Leading extends StatelessWidget {
+  const RepeatScreen$AppBar$Leading({required this.onPressed, super.key});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: ValueListenableBuilder(
+        valueListenable: context.controllerOf<RepeatController>(listen: true),
+        builder: (_, state, __) {
+          final isLoading = state is RepeatState$Loading;
+          return IconButton(
+            onPressed: isLoading ? null : onPressed,
+            icon: isLoading
+                ? const CircularProgressIndicator.adaptive()
+                : const Icon(Icons.arrow_back_rounded),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class RepeatScreen$AppBar$Bottom extends StatelessWidget
     implements PreferredSizeWidget {
-  const RepeatScreenAppBarBottomTitle({required this.title, super.key});
+  const RepeatScreen$AppBar$Bottom({required this.title, super.key});
 
   final String title;
 

@@ -67,7 +67,7 @@ class FlashcardWidget extends StatelessWidget {
           MaterialPageRoute<void>(
             builder: (context) => ControllerScope(
               controller: repeatController,
-              child: RepeatScreen(flashcard: flashcard),
+              child: RepeatScreen(flashcard: flashcard.toEntity()),
             ),
           ),
         )

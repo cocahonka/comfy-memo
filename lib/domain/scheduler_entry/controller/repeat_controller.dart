@@ -39,6 +39,11 @@ sealed class RepeatState with _$RepeatState {
     required bool hasEverAnswered,
     required bool hasEverRated,
   }) = RepeatState$Success;
+
+  const RepeatState._();
+
+  bool get isNeverAnswered => !hasEverAnswered;
+  bool get isNeverRated => !hasEverRated;
 }
 
 base class RepeatController extends Controller<RepeatState> {
@@ -85,7 +90,7 @@ base class RepeatController extends Controller<RepeatState> {
   }
 
   void rate(RepeatRating? rating, {void Function()? onFirstRate}) {
-    if (!value.hasEverRated && rating != null) onFirstRate?.call();
+    if (value.isNeverRated && rating != null) onFirstRate?.call();
 
     setState(
       value.copyWith(
