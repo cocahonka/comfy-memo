@@ -47,9 +47,9 @@ class _RepeatRatingSelectorState extends State<RepeatRatingSelector> {
       ],
       selected: {if (_rating case final rating?) rating},
       onSelectionChanged: (newSelection) {
-        widget.onSelectionChanged(_rating);
         setState(() {
           _rating = newSelection.firstOrNull;
+          widget.onSelectionChanged(_rating);
         });
       },
     );
