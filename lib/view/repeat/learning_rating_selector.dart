@@ -1,7 +1,7 @@
 import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
 import 'package:flutter/material.dart';
 
-base class LearningRatingSelector extends StatefulWidget {
+class LearningRatingSelector extends StatefulWidget {
   const LearningRatingSelector({
     required this.onSelectionChanged,
     super.key,
@@ -13,7 +13,7 @@ base class LearningRatingSelector extends StatefulWidget {
   State<LearningRatingSelector> createState() => _LearningRatingSelectorState();
 }
 
-base class _LearningRatingSelectorState extends State<LearningRatingSelector> {
+class _LearningRatingSelectorState extends State<LearningRatingSelector> {
   RepeatRating? _selected;
 
   @override

@@ -5,7 +5,7 @@ extension ControllerScopeBuildContextExtension on BuildContext {
       ControllerScope.of<C>(this, listen: listen);
 }
 
-base class ControllerScope<C extends Listenable> extends InheritedWidget {
+class ControllerScope<C extends Listenable> extends InheritedWidget {
   const ControllerScope({
     required C controller,
     required super.child,
@@ -45,8 +45,7 @@ base class ControllerScope<C extends Listenable> extends InheritedWidget {
       _controller != oldWidget._controller;
 }
 
-base class _ControllerScopeElement<C extends Listenable>
-    extends InheritedElement {
+class _ControllerScopeElement<C extends Listenable> extends InheritedElement {
   _ControllerScopeElement(ControllerScope<C> super.widget);
 
   C get _controller => (widget as ControllerScope<C>)._controller;

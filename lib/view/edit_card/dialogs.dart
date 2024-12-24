@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-base class DiscardDialog extends StatelessWidget {
+class DiscardDialog extends StatelessWidget {
   const DiscardDialog({super.key});
 
   @override
@@ -28,7 +28,7 @@ base class DiscardDialog extends StatelessWidget {
   }
 }
 
-base class DeleteDialog extends StatelessWidget {
+class DeleteDialog extends StatelessWidget {
   const DeleteDialog({super.key});
 
   @override

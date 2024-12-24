@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-base class FlipCard extends StatefulWidget {
+class FlipCard extends StatefulWidget {
   const FlipCard({
     required this.front,
     required this.back,
@@ -24,7 +24,7 @@ base class FlipCard extends StatefulWidget {
   State<FlipCard> createState() => _FlipCardState();
 }
 
-base class _FlipCardState extends State<FlipCard> {
+class _FlipCardState extends State<FlipCard> {
   bool _inProgress = false;
   bool _isFlipped = false;
 
@@ -77,7 +77,7 @@ base class _FlipCardState extends State<FlipCard> {
   }
 }
 
-base class RotationY extends StatelessWidget {
+class RotationY extends StatelessWidget {
   const RotationY({
     required this.child,
     required this.angle,

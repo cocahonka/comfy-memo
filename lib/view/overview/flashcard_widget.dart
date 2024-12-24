@@ -8,7 +8,7 @@ import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:comfy_memo/view/scopes/dependencies_scope.dart';
 import 'package:flutter/material.dart';
 
-base class FlashcardWidget extends StatelessWidget {
+class FlashcardWidget extends StatelessWidget {
   const FlashcardWidget({required this.flashcard, super.key});
 
   final FlashcardWithDue flashcard;
@@ -75,7 +75,7 @@ base class FlashcardWidget extends StatelessWidget {
   }
 }
 
-base class FlashcardWidget$Headline extends StatelessWidget {
+class FlashcardWidget$Headline extends StatelessWidget {
   const FlashcardWidget$Headline({required this.flashcard, super.key});
 
   final FlashcardWithDue flashcard;
@@ -136,7 +136,7 @@ base class FlashcardWidget$Headline extends StatelessWidget {
   }
 }
 
-base class FlashcardWidget$Body extends StatelessWidget {
+class FlashcardWidget$Body extends StatelessWidget {
   const FlashcardWidget$Body({required this.term, super.key});
 
   final String term;
@@ -155,7 +155,7 @@ base class FlashcardWidget$Body extends StatelessWidget {
   }
 }
 
-base class FlashcardWidget$Notification extends StatelessWidget {
+class FlashcardWidget$Notification extends StatelessWidget {
   const FlashcardWidget$Notification({super.key});
 
   @override

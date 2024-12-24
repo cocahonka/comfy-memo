@@ -11,7 +11,7 @@ import 'package:comfy_memo/view/edit_card/self_verify_selector.dart';
 import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:flutter/material.dart';
 
-base class EditCardScreen extends StatefulWidget {
+class EditCardScreen extends StatefulWidget {
   const EditCardScreen._internal({
     required this.isCreateMode,
     required this.flashcard,
@@ -49,7 +49,7 @@ base class EditCardScreen extends StatefulWidget {
   State<EditCardScreen> createState() => _EditCardScreenState();
 }
 
-base class _EditCardScreenState extends State<EditCardScreen> {
+class _EditCardScreenState extends State<EditCardScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late final FlashcardEditController _editController;

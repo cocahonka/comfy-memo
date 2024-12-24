@@ -1,7 +1,7 @@
 import 'package:comfy_memo/view/common/deffered_value_listenable_builder.dart';
 import 'package:flutter/material.dart';
 
-base class CustomTextFormField extends StatefulWidget {
+class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     required this.label,
     required TextEditingController controller,
@@ -29,7 +29,7 @@ base class CustomTextFormField extends StatefulWidget {
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
 
-base class _CustomTextFormFieldState extends State<CustomTextFormField> {
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
   final WidgetStatesController _widgetStatesController =
       WidgetStatesController();
   late ThemeData _theme;

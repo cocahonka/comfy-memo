@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-base class ExitWithoutRateDialog extends StatelessWidget {
+class ExitWithoutRateDialog extends StatelessWidget {
   const ExitWithoutRateDialog({super.key});
 
   @override

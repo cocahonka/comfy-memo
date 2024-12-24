@@ -1,7 +1,7 @@
 import 'package:comfy_memo/domain/flashcard/entity/flashcard.dart';
 import 'package:flutter/material.dart';
 
-base class SelfVerifySelector extends StatefulWidget {
+class SelfVerifySelector extends StatefulWidget {
   const SelfVerifySelector({
     required this.initialValue,
     required this.onSelectionChanged,
@@ -15,7 +15,7 @@ base class SelfVerifySelector extends StatefulWidget {
   State<SelfVerifySelector> createState() => _SelfVerifySelectorState();
 }
 
-base class _SelfVerifySelectorState extends State<SelfVerifySelector> {
+class _SelfVerifySelectorState extends State<SelfVerifySelector> {
   late SelfVerify _selected = widget.initialValue;
 
   @override

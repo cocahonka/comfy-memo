@@ -2,7 +2,7 @@ import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
 import 'package:comfy_memo/view/repeat/learning_rating_selector.dart';
 import 'package:flutter/material.dart';
 
-base class TermCard extends StatelessWidget {
+class TermCard extends StatelessWidget {
   const TermCard({
     required this.aspectRatio,
     required this.child,
@@ -30,7 +30,7 @@ base class TermCard extends StatelessWidget {
   }
 }
 
-base class TermCardTermSide extends StatelessWidget {
+class TermCardTermSide extends StatelessWidget {
   const TermCardTermSide({
     required this.aspectRatio,
     required this.term,
@@ -57,7 +57,7 @@ base class TermCardTermSide extends StatelessWidget {
   }
 }
 
-base class TermCardRateSide extends StatelessWidget {
+class TermCardRateSide extends StatelessWidget {
   const TermCardRateSide({
     required this.aspectRatio,
     required this.term,

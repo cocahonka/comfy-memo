@@ -9,7 +9,7 @@ import 'package:comfy_memo/view/repeat/term_card.dart';
 import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:flutter/material.dart';
 
-base class RepeatScreen extends StatefulWidget {
+class RepeatScreen extends StatefulWidget {
   const RepeatScreen({
     required this.flashcard,
     super.key,
@@ -21,7 +21,7 @@ base class RepeatScreen extends StatefulWidget {
   State<RepeatScreen> createState() => _RepeatScreenState();
 }
 
-base class _RepeatScreenState extends State<RepeatScreen> {
+class _RepeatScreenState extends State<RepeatScreen> {
   late RepeatController _repeatController;
   final TextEditingController _textController = TextEditingController();
 
@@ -195,7 +195,7 @@ base class _RepeatScreenState extends State<RepeatScreen> {
   }
 }
 
-base class RepeatScreenAppBarBottomTitle extends StatelessWidget
+class RepeatScreenAppBarBottomTitle extends StatelessWidget
     implements PreferredSizeWidget {
   const RepeatScreenAppBarBottomTitle({required this.title, super.key});
 

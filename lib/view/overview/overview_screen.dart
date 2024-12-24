@@ -12,7 +12,7 @@ import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:comfy_memo/view/scopes/dependencies_scope.dart';
 import 'package:flutter/material.dart';
 
-base class OverviewScreen extends StatelessWidget {
+class OverviewScreen extends StatelessWidget {
   const OverviewScreen({super.key});
 
   Future<void> _onAdd(BuildContext context) async {
