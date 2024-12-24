@@ -30,9 +30,14 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  final WidgetStatesController _widgetStatesController =
-      WidgetStatesController();
+  late final WidgetStatesController _widgetStatesController;
   late ThemeData _theme;
+
+  @override
+  void initState() {
+    _widgetStatesController = WidgetStatesController();
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -93,8 +98,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             top: 16,
             child: ValueListenableBuilder(
               valueListenable: widget._controller,
-              builder: (context, textEditingValue, _) => Visibility(
-                visible: textEditingValue.text.isNotEmpty,
+              builder: (context, textEditingValue, _) => Offstage(
+                offstage: textEditingValue.text.isEmpty,
                 child: DefferedValueListenableBuilder(
                   valueListenable: _widgetStatesController,
                   builder: (context, states, _) => GestureDetector(
