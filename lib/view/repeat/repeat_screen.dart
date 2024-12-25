@@ -93,56 +93,64 @@ class _RepeatScreenState extends State<RepeatScreen> {
         onFirstRate: _showFirstRateSnackbar,
       );
 
+  void _onPop(bool didPop, Object? result) {
+    if (didPop) return;
+    unawaited(_onClose());
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: Add pop scope
     final repeatCardAspectRatio =
         widget.flashcard.selfVerify == SelfVerify.written ? 0.92 : 0.62;
 
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        bottom: RepeatScreen$AppBar$Bottom(title: widget.flashcard.title),
-        leading: RepeatScreen$AppBar$Leading(onPressed: _onClose),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Column(
-            children: [
-              FlipCard(
-                duration: const Duration(milliseconds: 800),
-                curve: Curves.easeInOut,
-                onFlipped: _onFlipped,
-                front: RepeatCard$Term(
-                  aspectRatio: repeatCardAspectRatio,
-                  term: widget.flashcard.term,
-                ),
-                back: RepeatCard$Rate(
-                  aspectRatio: repeatCardAspectRatio,
-                  term: widget.flashcard.definition,
-                  onRatingChanged: _onRatingChanged,
-                ),
-              ),
-              if (widget.flashcard.selfVerify == SelfVerify.written)
-                Padding(
-                  padding: const EdgeInsets.only(top: 32),
-                  child: ValueListenableBuilder(
-                    valueListenable: _repeatController.select(
-                      (controller) => controller.state,
-                      (prev, next) => prev.isInitial != next.isInitial,
-                    ),
-                    builder: (_, state, __) => CustomTextFormField(
-                      label: 'Self Verify',
-                      isEnabled: state.isInitial,
-                      isCleanable: true,
-                      minLines: 6,
-                      maxLines: 6,
-                      controller: _textController,
-                    ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _onPop,
+      child: Scaffold(
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+          bottom: RepeatScreen$AppBar$Bottom(title: widget.flashcard.title),
+          leading: RepeatScreen$AppBar$Leading(onPressed: _onClose),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              children: [
+                FlipCard(
+                  duration: const Duration(milliseconds: 800),
+                  curve: Curves.easeInOut,
+                  onFlipped: _onFlipped,
+                  front: RepeatCard$Term(
+                    aspectRatio: repeatCardAspectRatio,
+                    term: widget.flashcard.term,
+                  ),
+                  back: RepeatCard$Rate(
+                    aspectRatio: repeatCardAspectRatio,
+                    term: widget.flashcard.definition,
+                    onRatingChanged: _onRatingChanged,
                   ),
                 ),
-            ],
+                if (widget.flashcard.selfVerify == SelfVerify.written)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 32),
+                    child: ValueListenableBuilder(
+                      valueListenable: _repeatController.select(
+                        (controller) => controller.state,
+                        (prev, next) => prev.isInitial != next.isInitial,
+                      ),
+                      builder: (_, state, __) => CustomTextFormField(
+                        label: 'Self Verify',
+                        isEnabled: state.isInitial,
+                        isCleanable: true,
+                        minLines: 6,
+                        maxLines: 6,
+                        controller: _textController,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
