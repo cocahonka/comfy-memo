@@ -60,6 +60,7 @@ class _RepeatScreenState extends State<RepeatScreen> {
     if (!mounted) return;
 
     final state = _repeatController.state;
+    if (state.isLoading) return;
     if (state.isNeverAnswered) {
       Navigator.pop(context);
       return;
