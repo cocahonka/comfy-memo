@@ -55,10 +55,10 @@ class _FlipCardState extends State<FlipCard>
 
     if (_controller.isCompleted) {
       _controller.reverse();
-      widget.onFlipped(FlipCardState.back);
+      widget.onFlipped(FlipCardState.front);
     } else {
       _controller.forward();
-      widget.onFlipped(FlipCardState.front);
+      widget.onFlipped(FlipCardState.back);
     }
   }
 
