@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
+import 'package:comfy_memo/domain/common/listenable_selector.dart';
 import 'package:comfy_memo/domain/flashcard/entity/flashcard.dart';
 import 'package:comfy_memo/domain/scheduler_entry/controller/repeat_controller.dart';
 import 'package:comfy_memo/view/common/custom_text_field.dart';
@@ -57,7 +59,7 @@ class _RepeatScreenState extends State<RepeatScreen> {
   Future<void> _onClose() async {
     if (!mounted) return;
 
-    final state = _repeatController.value;
+    final state = _repeatController.state;
     if (state.isNeverAnswered) {
       Navigator.pop(context);
       return;
@@ -77,8 +79,23 @@ class _RepeatScreenState extends State<RepeatScreen> {
     if (mounted && !isExitCanceled) Navigator.of(context).pop();
   }
 
+  void _onFlipped(FlipCardState state) {
+    switch (state) {
+      case FlipCardState.front:
+        _repeatController.unanswer();
+      case FlipCardState.back:
+        _repeatController.answer();
+    }
+  }
+
+  void _onRatingChanged(RepeatRating? rating) => _repeatController.rate(
+        rating,
+        onFirstRate: _showFirstRateSnackbar,
+      );
+
   @override
   Widget build(BuildContext context) {
+    // TODO: Add pop scope
     final repeatCardAspectRatio =
         widget.flashcard.selfVerify == SelfVerify.written ? 0.92 : 0.62;
 
@@ -96,7 +113,7 @@ class _RepeatScreenState extends State<RepeatScreen> {
               FlipCard(
                 duration: const Duration(milliseconds: 800),
                 curve: Curves.easeInOut,
-                onFlipped: (state) => _repeatController.answer(),
+                onFlipped: _onFlipped,
                 front: RepeatCard$Term(
                   aspectRatio: repeatCardAspectRatio,
                   term: widget.flashcard.term,
@@ -104,20 +121,20 @@ class _RepeatScreenState extends State<RepeatScreen> {
                 back: RepeatCard$Rate(
                   aspectRatio: repeatCardAspectRatio,
                   term: widget.flashcard.definition,
-                  onRatingChanged: (rating) => _repeatController.rate(
-                    rating,
-                    onFirstRate: _showFirstRateSnackbar,
-                  ),
+                  onRatingChanged: _onRatingChanged,
                 ),
               ),
               if (widget.flashcard.selfVerify == SelfVerify.written)
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
                   child: ValueListenableBuilder(
-                    valueListenable: _repeatController,
-                    builder: (context, state, _) => CustomTextFormField(
+                    valueListenable: _repeatController.select(
+                      (controller) => controller.state,
+                      (prev, next) => prev.isInitial != next.isInitial,
+                    ),
+                    builder: (_, state, __) => CustomTextFormField(
                       label: 'Self Verify',
-                      isEnabled: state is RepeatState$Initial,
+                      isEnabled: state.isInitial,
                       isCleanable: true,
                       minLines: 6,
                       maxLines: 6,
@@ -186,12 +203,15 @@ class RepeatScreen$AppBar$Leading extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: ValueListenableBuilder(
-        valueListenable: context.controllerOf<RepeatController>(listen: true),
+        valueListenable:
+            context.controllerOf<RepeatController>(listen: true).select(
+                  (controller) => controller.state,
+                  (prev, next) => prev.isLoading != next.isLoading,
+                ),
         builder: (_, state, __) {
-          final isLoading = state is RepeatState$Loading;
           return IconButton(
-            onPressed: isLoading ? null : onPressed,
-            icon: isLoading
+            onPressed: state.isLoading ? null : onPressed,
+            icon: state.isLoading
                 ? const CircularProgressIndicator.adaptive()
                 : const Icon(Icons.arrow_back_rounded),
           );

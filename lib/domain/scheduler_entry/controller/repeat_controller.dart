@@ -44,6 +44,9 @@ sealed class RepeatState with _$RepeatState {
 
   bool get isNeverAnswered => !hasEverAnswered;
   bool get isNeverRated => !hasEverRated;
+
+  bool get isInitial => this is RepeatState$Initial;
+  bool get isLoading => this is RepeatState$Loading;
 }
 
 base class RepeatController extends Controller<RepeatState> {
@@ -70,26 +73,27 @@ base class RepeatController extends Controller<RepeatState> {
   final FsrsAlgorithm _fsrsAlgorithm;
 
   void answer() {
-    if (state is RepeatState$Answered) {
-      setState(
-        RepeatState.initial(
-          rating: state.rating,
-          hasEverAnswered: true,
-          hasEverRated: state.hasEverRated,
-        ),
-      );
-    } else {
-      setState(
-        RepeatState.answered(
-          rating: state.rating,
-          hasEverAnswered: true,
-          hasEverRated: state.hasEverRated,
-        ),
-      );
-    }
+    if (!state.isInitial) return;
+    setState(
+      RepeatState.answered(
+        rating: state.rating,
+        hasEverAnswered: true,
+        hasEverRated: state.hasEverRated,
+      ),
+    );
   }
 
-  void rate(RepeatRating? rating, {void Function()? onFirstRate}) {
+  void unanswer() {
+    setState(
+      RepeatState.initial(
+        rating: state.rating,
+        hasEverAnswered: state.hasEverAnswered,
+        hasEverRated: state.hasEverRated,
+      ),
+    );
+  }
+
+  void rate(RepeatRating? rating, {VoidCallback? onFirstRate}) {
     if (state.isNeverRated && rating != null) onFirstRate?.call();
 
     setState(
@@ -105,12 +109,8 @@ base class RepeatController extends Controller<RepeatState> {
     required int cardId,
     DateTime? submitTime,
   }) async {
-    final RepeatRating rating;
-    if (state.rating case final nonNullableRating?) {
-      rating = nonNullableRating;
-    } else {
-      return;
-    }
+    final rating = state.rating;
+    if (rating == null) return;
 
     return handle(() async {
       final algorithmType = await _preferencesRepository.fetch(cardId);
