@@ -374,6 +374,11 @@ final class MaterialTheme {
           behavior: SnackBarBehavior.floating,
           dismissDirection: DismissDirection.horizontal,
         ),
+        cardTheme: CardThemeData(
+          margin: EdgeInsets.zero,
+          color: colorScheme.surfaceContainerLow,
+          clipBehavior: Clip.antiAlias,
+        ),
       );
 
   List<ExtendedColor> get extendedColors => [];

@@ -14,13 +14,9 @@ class RepeatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return AspectRatio(
       aspectRatio: aspectRatio,
       child: Card(
-        margin: EdgeInsets.zero,
-        color: theme.colorScheme.surfaceContainerLow,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: child,

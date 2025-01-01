@@ -42,7 +42,7 @@ base class FlashcardOverviewController extends Controller<OverviewState> {
   Future<void> fetchAll() async => handle(() async {
         final flashcards = await _flashcardRepository.fetch();
         final transformed = await Future.wait(flashcards.map(_transform))
-          ..sort(_compareForSort);
+          ..sort(_compareFlashcards);
         setState(OverviewState.idle(transformed));
       });
 
@@ -50,11 +50,11 @@ base class FlashcardOverviewController extends Controller<OverviewState> {
         final transformed = await Future.wait(
           state.flashcards.map((card) => card.toEntity()).map(_transform),
         )
-          ..sort(_compareForSort);
+          ..sort(_compareFlashcards);
         setState(OverviewState.idle(transformed));
       });
 
-  int _compareForSort(FlashcardWithDue first, FlashcardWithDue second) {
+  int _compareFlashcards(FlashcardWithDue first, FlashcardWithDue second) {
     if (first.isRepetitionTime && second.isRepetitionTime) {
       return first.id.compareTo(second.id);
     } else if (first.isRepetitionTime) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comfy_memo/domain/flashcard/controller/flashcard_edit_controller.dart';
 import 'package:comfy_memo/domain/flashcard/controller/flashcard_overview_controller.dart';
 import 'package:comfy_memo/domain/flashcard/entity/flashcard_with_due.dart';
@@ -18,11 +20,8 @@ class FlashcardWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      margin: EdgeInsets.zero,
-      color: theme.colorScheme.surfaceContainerLow,
-      clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () async => _onOpen(context),
+        onTap: () => _onOpen(context),
         splashColor: theme.colorScheme.primary.withValues(alpha: 0.1),
         highlightColor: theme.colorScheme.primary.withValues(alpha: 0.1),
         child: Padding(
@@ -49,10 +48,10 @@ class FlashcardWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _onOpen(BuildContext context) async {
+  void _onOpen(BuildContext context) {
     if (!context.mounted) return;
 
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final repeatController = RepeatController(
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
       reviewLogRepository: dependencies.reviewLogRepository,
@@ -62,16 +61,18 @@ class FlashcardWidget extends StatelessWidget {
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
 
-    await Navigator.of(context)
-        .push(
-          MaterialPageRoute<void>(
-            builder: (context) => ControllerScope(
-              controller: repeatController,
-              child: RepeatScreen(flashcard: flashcard.toEntity()),
+    unawaited(
+      Navigator.of(context)
+          .push(
+            MaterialPageRoute<void>(
+              builder: (context) => ControllerScope(
+                controller: repeatController,
+                child: RepeatScreen(flashcard: flashcard.toEntity()),
+              ),
             ),
-          ),
-        )
-        .then((_) => overviewController.fetchSchedulerOnly());
+          )
+          .then((_) => overviewController.fetchSchedulerOnly()),
+    );
   }
 }
 
@@ -103,7 +104,7 @@ class FlashcardWidget$Headline extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16),
           child: IconButton.filledTonal(
-            onPressed: () async => _onEdit(context),
+            onPressed: () => _onEdit(context),
             icon: const Icon(Icons.edit_outlined),
           ),
         ),
@@ -111,28 +112,30 @@ class FlashcardWidget$Headline extends StatelessWidget {
     );
   }
 
-  Future<void> _onEdit(BuildContext context) async {
+  void _onEdit(BuildContext context) {
     if (!context.mounted) return;
 
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final editController = FlashcardEditController(
       flashcardRepository: dependencies.flashcardRepository,
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
       reviewLogRepository: dependencies.reviewLogRepository,
     );
 
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ControllerScope(
-        controller: editController,
-        child: Dialog.fullscreen(
-          child: EditCardScreen.editMode(flashcard: flashcard.toEntity()),
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => ControllerScope(
+          controller: editController,
+          child: Dialog.fullscreen(
+            child: EditCardScreen.editMode(flashcard: flashcard.toEntity()),
+          ),
         ),
-      ),
-    ).then((_) => overviewController.fetchAll());
+      ).then((_) => overviewController.fetchAll()),
+    );
   }
 }
 

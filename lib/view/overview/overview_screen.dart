@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 class OverviewScreen extends StatelessWidget {
   const OverviewScreen({super.key});
 
-  Future<void> _onAdd(BuildContext context) async {
+  void _onAdd(BuildContext context) {
     if (!context.mounted) return;
 
     final overviewController =
@@ -27,16 +27,18 @@ class OverviewScreen extends StatelessWidget {
       reviewLogRepository: dependencies.reviewLogRepository,
     );
 
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return ControllerScope(
-          controller: editController,
-          child: const Dialog.fullscreen(child: EditCardScreen.createMode()),
-        );
-      },
-    ).then((_) => overviewController.fetchAll());
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return ControllerScope(
+            controller: editController,
+            child: const Dialog.fullscreen(child: EditCardScreen.createMode()),
+          );
+        },
+      ).then((_) => overviewController.fetchAll()),
+    );
   }
 
   void _showError(BuildContext context, String message) {
@@ -51,7 +53,7 @@ class OverviewScreen extends StatelessWidget {
   void _generateSampleData(BuildContext context) {
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final editController = FlashcardEditController(
       flashcardRepository: dependencies.flashcardRepository,
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
@@ -97,7 +99,7 @@ class OverviewScreen extends StatelessWidget {
         foregroundColor: theme.colorScheme.onTertiaryContainer,
         backgroundColor: theme.colorScheme.tertiaryContainer,
         child: const Icon(Icons.add_rounded),
-        onPressed: () async => _onAdd(context),
+        onPressed: () => _onAdd(context),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
