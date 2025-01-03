@@ -20,7 +20,7 @@ class OverviewScreen extends StatelessWidget {
 
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final editController = FlashcardEditController(
       flashcardRepository: dependencies.flashcardRepository,
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
