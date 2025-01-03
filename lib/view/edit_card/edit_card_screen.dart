@@ -5,13 +5,14 @@ import 'package:comfy_memo/domain/flashcard/dto/flashcard_create_dto.dart';
 import 'package:comfy_memo/domain/flashcard/dto/flashcard_edit_dto.dart';
 import 'package:comfy_memo/domain/flashcard/entity/flashcard.dart';
 import 'package:comfy_memo/view/common/custom_text_field.dart';
+import 'package:comfy_memo/view/common/extensions.dart';
 import 'package:comfy_memo/view/common/icon_button_with_custom_background.dart';
 import 'package:comfy_memo/view/edit_card/dialogs.dart';
 import 'package:comfy_memo/view/edit_card/self_verify_selector.dart';
 import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:flutter/material.dart';
 
-base class EditCardScreen extends StatefulWidget {
+class EditCardScreen extends StatefulWidget {
   const EditCardScreen._internal({
     required this.isCreateMode,
     required this.flashcard,
@@ -49,26 +50,31 @@ base class EditCardScreen extends StatefulWidget {
   State<EditCardScreen> createState() => _EditCardScreenState();
 }
 
-base class _EditCardScreenState extends State<EditCardScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+class _EditCardScreenState extends State<EditCardScreen> {
+  late final GlobalKey<FormState> _formKey;
+  late FlashcardEditController _editController;
+  late final TextEditingController _titleContoller;
+  late final TextEditingController _termController;
+  late final TextEditingController _definitionController;
+  late SelfVerify _selfVerify;
 
-  late final FlashcardEditController _editController;
-  late final TextEditingController _titleContoller = TextEditingController(
-    text: widget.flashcard?.title,
-  );
-  late final TextEditingController _termController = TextEditingController(
-    text: widget.flashcard?.term,
-  );
-  late final TextEditingController _definitionController =
-      TextEditingController(
-    text: widget.flashcard?.definition,
-  );
-  late SelfVerify _selfVerify = widget.selfVerifyInitialValue;
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _titleContoller = TextEditingController(text: widget.flashcard?.title);
+    _termController = TextEditingController(text: widget.flashcard?.term);
+    _definitionController =
+        TextEditingController(text: widget.flashcard?.definition);
+    _selfVerify = widget.selfVerifyInitialValue;
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
     _editController =
-        context.controllerOf<FlashcardEditController>(listen: true);
+        context.controllerOf<FlashcardEditController>(listen: true)
+          ..removeListener(_onEditStateChanged)
+          ..addListener(_onEditStateChanged);
     super.didChangeDependencies();
   }
 
@@ -77,7 +83,38 @@ base class _EditCardScreenState extends State<EditCardScreen> {
     _titleContoller.dispose();
     _termController.dispose();
     _definitionController.dispose();
+    _editController.removeListener(_onEditStateChanged);
     super.dispose();
+  }
+
+  void _onEditStateChanged() {
+    final state = _editController.state;
+
+    switch (state) {
+      case EditState$Success():
+        Navigator.pop(context);
+        Navigator.pop(context);
+      case final EditState$Error error:
+        _showError(error.message);
+      case EditState$Loading():
+        _showLoading();
+      case EditState$Idle():
+    }
+  }
+
+  void _showLoading() => unawaited(
+        showDialog(
+          context: context,
+          builder: (context) => const EditDialog$Loading(),
+        ),
+      );
+
+  void _showError(String message) {
+    final snackBar = SnackBar(
+      content: Text('An error occured: $message'),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   String? _validateTitle(String? text) {
@@ -107,13 +144,29 @@ base class _EditCardScreenState extends State<EditCardScreen> {
     return 'Definition is required';
   }
 
-  void _onSave() {
-    final isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) return;
+  ({String title, String term, String definition}) get textFieldValues => (
+        title: _titleContoller.trimmedText,
+        term: _termController.trimmedText,
+        definition: _definitionController.trimmedText
+      );
 
-    final title = _titleContoller.text.trim();
-    final term = _termController.text.trim();
-    final definition = _definitionController.text.trim();
+  bool get isAnythingChanged {
+    final (:title, :term, :definition) = textFieldValues;
+    return title != (widget.flashcard?.title ?? '') ||
+        term != (widget.flashcard?.term ?? '') ||
+        definition != (widget.flashcard?.definition ?? '') ||
+        _selfVerify != widget.selfVerifyInitialValue;
+  }
+
+  void _onSave() {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
+    if (!isAnythingChanged) {
+      Navigator.pop(context);
+      return;
+    }
+
+    final (:title, :term, :definition) = textFieldValues;
 
     if (widget.isCreateMode) {
       unawaited(
@@ -139,44 +192,42 @@ base class _EditCardScreenState extends State<EditCardScreen> {
         ),
       );
     }
-
-    Navigator.of(context).pop();
   }
 
-  Future<void> _onClose(BuildContext context) async {
-    final title = _titleContoller.text.trim();
-    final term = _termController.text.trim();
-    final definition = _definitionController.text.trim();
+  Future<void> _onClose() async {
+    if (!mounted) return;
 
-    if (title == (widget.flashcard?.title ?? '') &&
-        term == (widget.flashcard?.term ?? '') &&
-        definition == (widget.flashcard?.definition ?? '')) {
+    if (!isAnythingChanged) {
       Navigator.pop(context);
-    } else {
-      final isDiscarded = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => const DiscardDialog(),
-      );
-
-      if (context.mounted && (isDiscarded ?? false)) Navigator.pop(context);
+      return;
     }
+
+    final isDiscarded = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const EditDialog$DiscardChanges(),
+        ) ??
+        false;
+
+    if (mounted && isDiscarded) Navigator.pop(context);
   }
 
-  Future<void> _onDelete(BuildContext context) async {
-    final isConfirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const DeleteDialog(),
-    );
+  Future<void> _onDelete() async {
+    if (!mounted) return;
 
-    if (isConfirmed ?? false) {
+    final isConfirmed = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const EditDialog$DeleteCard(),
+        ) ??
+        false;
+
+    if (mounted && isConfirmed) {
       unawaited(
         _editController.delete(
           widget.flashcard!.id,
         ),
       );
-      if (context.mounted) Navigator.pop(context);
     }
   }
 
@@ -190,7 +241,7 @@ base class _EditCardScreenState extends State<EditCardScreen> {
         title: Text(widget.isCreateMode ? 'Add Card' : 'Edit Card'),
         forceMaterialTransparency: true,
         leading: IconButton(
-          onPressed: () async => _onClose(context),
+          onPressed: _onClose,
           icon: const Icon(Icons.close_rounded),
         ),
         actions: [
@@ -206,7 +257,7 @@ base class _EditCardScreenState extends State<EditCardScreen> {
               padding: const EdgeInsets.only(right: 12),
               child: IconButtonWithCustomBackground(
                 iconButton: IconButton(
-                  onPressed: () async => _onDelete(context),
+                  onPressed: _onDelete,
                   icon: const Icon(Icons.delete_outline_rounded),
                   color: theme.colorScheme.onError,
                 ),
@@ -219,7 +270,7 @@ base class _EditCardScreenState extends State<EditCardScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Form(
-            key: formKey,
+            key: _formKey,
             child: Column(
               children: [
                 CustomTextFormField(

@@ -2,14 +2,15 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-base class FlipCard extends StatefulWidget {
+enum FlipCardState { front, back }
+
+class FlipCard extends StatefulWidget {
   const FlipCard({
     required this.front,
     required this.back,
     required this.duration,
     required this.curve,
-    this.onTapCallback,
-    this.isDiscrete = true,
+    required this.onFlipped,
     super.key,
   });
 
@@ -17,56 +18,81 @@ base class FlipCard extends StatefulWidget {
   final Widget back;
   final Duration duration;
   final Curve curve;
-  final VoidCallback? onTapCallback;
-  final bool isDiscrete;
+  final ValueChanged<FlipCardState> onFlipped;
 
   @override
   State<FlipCard> createState() => _FlipCardState();
 }
 
-base class _FlipCardState extends State<FlipCard> {
-  bool _inProgress = false;
-  bool _isFlipped = false;
+class _FlipCardState extends State<FlipCard>
+    with SingleTickerProviderStateMixin {
+  final Tween<double> tween = Tween(begin: 0, end: math.pi);
+  late final Animation<double> _animation;
+  late final AnimationController _controller;
+
+  double get tweenMiddle => (tween.begin! + tween.end!) / 2;
+  bool get isFrontSide => _animation.value <= tweenMiddle;
+  bool get isBackSide => !isFrontSide;
+
+  @override
+  void initState() {
+    _controller = AnimationController(duration: widget.duration, vsync: this);
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: widget.curve,
+    ).drive(tween);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    if (_controller.isAnimating) return;
+
+    if (_controller.isCompleted) {
+      _controller.reverse();
+      widget.onFlipped(FlipCardState.front);
+    } else {
+      _controller.forward();
+      widget.onFlipped(FlipCardState.back);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: GestureDetector(
-        onTap: () {
-          if (widget.isDiscrete && _inProgress) return;
-
-          _inProgress = true;
-          widget.onTapCallback?.call();
-
-          setState(() {
-            _isFlipped = !_isFlipped;
-          });
-        },
+        onTap: _onTap,
         child: Stack(
           children: [
-            TweenAnimationBuilder(
-              curve: widget.curve,
-              tween: Tween<double>(begin: 0, end: _isFlipped ? -180 : 0),
-              duration: widget.duration,
-              child: widget.back,
-              onEnd: () => _inProgress = false,
-              builder: (context, value, child) {
-                return RotationY(
-                  angle: value + 180,
-                  child: Offstage(offstage: value >= -90, child: child!),
+            AnimatedBuilder(
+              animation: _animation,
+              child: widget.front,
+              builder: (context, child) {
+                return Offstage(
+                  offstage: !isFrontSide,
+                  child: RotationY(
+                    angle: _animation.value,
+                    child: child!,
+                  ),
                 );
               },
             ),
-            TweenAnimationBuilder(
-              curve: widget.curve,
-              onEnd: () => _inProgress = false,
-              tween: Tween<double>(begin: 0, end: _isFlipped ? -180 : 0),
-              duration: widget.duration,
-              child: widget.front,
-              builder: (context, value, child) {
-                return RotationY(
-                  angle: value,
-                  child: Offstage(offstage: value < -90, child: child!),
+            AnimatedBuilder(
+              animation: _animation,
+              child: widget.back,
+              builder: (context, child) {
+                return Offstage(
+                  offstage: !isBackSide,
+                  child: RotationY(
+                    angle: _animation.value,
+                    mirror: true,
+                    child: child!,
+                  ),
                 );
               },
             ),
@@ -77,17 +103,17 @@ base class _FlipCardState extends State<FlipCard> {
   }
 }
 
-base class RotationY extends StatelessWidget {
+class RotationY extends StatelessWidget {
   const RotationY({
-    required this.child,
     required this.angle,
+    required this.child,
+    this.mirror = false,
     super.key,
   });
 
-  final Widget child;
   final double angle;
-
-  static const _degrees2Radians = math.pi / 180.0;
+  final bool mirror;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +121,7 @@ base class RotationY extends StatelessWidget {
       alignment: Alignment.center,
       transform: Matrix4.identity()
         ..setEntry(3, 2, 0.001)
-        ..rotateY(angle * _degrees2Radians),
+        ..rotateY(angle + (mirror ? math.pi : 0)),
       child: child,
     );
   }

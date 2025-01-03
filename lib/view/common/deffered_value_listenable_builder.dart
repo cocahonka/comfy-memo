@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-base class DefferedValueListenableBuilder<T> extends StatefulWidget {
+class DefferedValueListenableBuilder<T> extends StatefulWidget {
   const DefferedValueListenableBuilder({
     required this.valueListenable,
     required this.builder,
@@ -18,7 +18,7 @@ base class DefferedValueListenableBuilder<T> extends StatefulWidget {
       _DefferedValueListenableBuilderState<T>();
 }
 
-base class _DefferedValueListenableBuilderState<T>
+class _DefferedValueListenableBuilderState<T>
     extends State<DefferedValueListenableBuilder<T>> {
   late T value;
 

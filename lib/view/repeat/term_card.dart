@@ -1,9 +1,9 @@
 import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
-import 'package:comfy_memo/view/repeat/learning_rating_selector.dart';
+import 'package:comfy_memo/view/repeat/repeat_rating_selector.dart';
 import 'package:flutter/material.dart';
 
-base class TermCard extends StatelessWidget {
-  const TermCard({
+class RepeatCard extends StatelessWidget {
+  const RepeatCard({
     required this.aspectRatio,
     required this.child,
     super.key,
@@ -14,13 +14,9 @@ base class TermCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return AspectRatio(
       aspectRatio: aspectRatio,
       child: Card(
-        margin: EdgeInsets.zero,
-        color: theme.colorScheme.surfaceContainerLow,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: child,
@@ -30,8 +26,8 @@ base class TermCard extends StatelessWidget {
   }
 }
 
-base class TermCardTermSide extends StatelessWidget {
-  const TermCardTermSide({
+class RepeatCard$Term extends StatelessWidget {
+  const RepeatCard$Term({
     required this.aspectRatio,
     required this.term,
     super.key,
@@ -44,11 +40,12 @@ base class TermCardTermSide extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TermCard(
+    return RepeatCard(
       aspectRatio: aspectRatio,
       child: SingleChildScrollView(
         child: Text(
           term,
+          textAlign: TextAlign.justify,
           style: theme.textTheme.bodyLarge
               ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
@@ -57,8 +54,8 @@ base class TermCardTermSide extends StatelessWidget {
   }
 }
 
-base class TermCardRateSide extends StatelessWidget {
-  const TermCardRateSide({
+class RepeatCard$Rate extends StatelessWidget {
+  const RepeatCard$Rate({
     required this.aspectRatio,
     required this.term,
     required this.onRatingChanged,
@@ -73,7 +70,7 @@ base class TermCardRateSide extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TermCard(
+    return RepeatCard(
       aspectRatio: aspectRatio,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +104,7 @@ base class TermCardRateSide extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child:
-                    LearningRatingSelector(onSelectionChanged: onRatingChanged),
+                    RepeatRatingSelector(onSelectionChanged: onRatingChanged),
               ),
             ],
           ),

@@ -1,13 +1,19 @@
 import 'package:flutter/foundation.dart';
 
-abstract base class Controller<State> extends ValueNotifier<State> {
-  Controller(State state) : super(state);
+abstract base class Controller<State> extends ValueListenable<State>
+    with ChangeNotifier {
+  Controller(State state) : _state = state;
+
+  State _state;
+  State get state => _state;
+
+  @override
+  State get value => _state;
 
   @protected
-  // For a functional approach
-  // ignore: use_setters_to_change_properties
   void setState(State state) {
-    value = state;
+    _state = state;
+    notifyListeners();
   }
 
   @protected

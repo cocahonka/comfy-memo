@@ -1,7 +1,7 @@
 import 'package:comfy_memo/domain/initialization/dependencies.dart';
 import 'package:flutter/widgets.dart';
 
-base class DependenciesScope extends InheritedWidget {
+class DependenciesScope extends InheritedWidget {
   const DependenciesScope({
     required this.dependencies,
     required super.child,

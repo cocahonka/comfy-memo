@@ -1,20 +1,20 @@
 import 'package:comfy_memo/domain/algorithm/entity/repeat_rating.dart';
 import 'package:flutter/material.dart';
 
-base class LearningRatingSelector extends StatefulWidget {
-  const LearningRatingSelector({
+class RepeatRatingSelector extends StatefulWidget {
+  const RepeatRatingSelector({
     required this.onSelectionChanged,
     super.key,
   });
 
-  final ValueSetter<RepeatRating?> onSelectionChanged;
+  final ValueChanged<RepeatRating?> onSelectionChanged;
 
   @override
-  State<LearningRatingSelector> createState() => _LearningRatingSelectorState();
+  State<RepeatRatingSelector> createState() => _RepeatRatingSelectorState();
 }
 
-base class _LearningRatingSelectorState extends State<LearningRatingSelector> {
-  RepeatRating? _selected;
+class _RepeatRatingSelectorState extends State<RepeatRatingSelector> {
+  RepeatRating? _rating;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +45,11 @@ base class _LearningRatingSelectorState extends State<LearningRatingSelector> {
           label: Text('Perfect'),
         ),
       ],
-      selected: {if (_selected != null) _selected!},
+      selected: {if (_rating case final rating?) rating},
       onSelectionChanged: (newSelection) {
         setState(() {
-          _selected = newSelection.firstOrNull;
-          widget.onSelectionChanged(_selected);
+          _rating = newSelection.firstOrNull;
+          widget.onSelectionChanged(_rating);
         });
       },
     );

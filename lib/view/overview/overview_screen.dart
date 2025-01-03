@@ -12,37 +12,38 @@ import 'package:comfy_memo/view/scopes/controller_scope.dart';
 import 'package:comfy_memo/view/scopes/dependencies_scope.dart';
 import 'package:flutter/material.dart';
 
-base class OverviewScreen extends StatelessWidget {
+class OverviewScreen extends StatelessWidget {
   const OverviewScreen({super.key});
 
-  Future<void> _onAdd(BuildContext context) async {
+  void _onAdd(BuildContext context) {
     if (!context.mounted) return;
 
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final editController = FlashcardEditController(
       flashcardRepository: dependencies.flashcardRepository,
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
       reviewLogRepository: dependencies.reviewLogRepository,
     );
 
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return ControllerScope(
-          controller: editController,
-          child: const Dialog.fullscreen(child: EditCardScreen.createMode()),
-        );
-      },
-    ).then((_) => overviewController.fetchAll());
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return ControllerScope(
+            controller: editController,
+            child: const Dialog.fullscreen(child: EditCardScreen.createMode()),
+          );
+        },
+      ).then((_) => overviewController.fetchAll()),
+    );
   }
 
   void _showError(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text('An error occured: $message'),
-      behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -51,7 +52,7 @@ base class OverviewScreen extends StatelessWidget {
   void _generateSampleData(BuildContext context) {
     final overviewController =
         context.controllerOf<FlashcardOverviewController>();
-    final dependencies = DependenciesScope.of(context, listen: true);
+    final dependencies = DependenciesScope.of(context);
     final editController = FlashcardEditController(
       flashcardRepository: dependencies.flashcardRepository,
       schedulerEntryRepository: dependencies.schedulerEntryRepository,
@@ -97,7 +98,7 @@ base class OverviewScreen extends StatelessWidget {
         foregroundColor: theme.colorScheme.onTertiaryContainer,
         backgroundColor: theme.colorScheme.tertiaryContainer,
         child: const Icon(Icons.add_rounded),
-        onPressed: () async => _onAdd(context),
+        onPressed: () => _onAdd(context),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
