@@ -44,7 +44,6 @@ class OverviewScreen extends StatelessWidget {
   void _showError(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text('An error occured: $message'),
-      behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

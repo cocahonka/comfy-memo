@@ -14,8 +14,8 @@ part 'flashcard_edit_controller.freezed.dart';
 
 @freezed
 sealed class EditState with _$EditState {
-  const factory EditState.loading() = EditState$Loading;
   const factory EditState.idle() = EditState$Idle;
+  const factory EditState.loading() = EditState$Loading;
   const factory EditState.success() = EditState$Success;
   const factory EditState.error(String message) = EditState$Error;
 }

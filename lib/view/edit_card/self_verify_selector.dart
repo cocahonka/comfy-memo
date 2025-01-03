@@ -16,7 +16,13 @@ class SelfVerifySelector extends StatefulWidget {
 }
 
 class _SelfVerifySelectorState extends State<SelfVerifySelector> {
-  late SelfVerify _selected = widget.initialValue;
+  late SelfVerify _selected;
+
+  @override
+  void initState() {
+    _selected = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
