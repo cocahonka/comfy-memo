@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DiscardDialog extends StatelessWidget {
-  const DiscardDialog({super.key});
+class EditDialog$DiscardChanges extends StatelessWidget {
+  const EditDialog$DiscardChanges({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,8 @@ class DiscardDialog extends StatelessWidget {
   }
 }
 
-class DeleteDialog extends StatelessWidget {
-  const DeleteDialog({super.key});
+class EditDialog$DeleteCard extends StatelessWidget {
+  const EditDialog$DeleteCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +55,20 @@ class DeleteDialog extends StatelessWidget {
           child: const Text('Delete'),
         ),
       ],
+    );
+  }
+}
+
+class EditDialog$Loading extends StatelessWidget {
+  const EditDialog$Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox.square(
+        dimension: 64,
+        child: CircularProgressIndicator.adaptive(),
+      ),
     );
   }
 }
